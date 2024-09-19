@@ -1,0 +1,22 @@
+{
+  "setup": {
+    "register": "Register your account",
+    "reg-button": "Register"
+  },
+  "login": {
+    "title": "Log in to Meowith",
+    "method": "Login Method",
+    "button": "Log in",
+    "choose-method": "Choose a method to log in:",
+    "basic": {
+      "password": "Password",
+      "username": "Username",
+      "register-prompt": "New to meowith?",
+      "register-button": "Register",
+      "password-confirm": "Confirm your password"
+    },
+    "catid": {
+      "prompt": "Log in using CatID"
+    }
+  }
+}
