@@ -7,12 +7,16 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminBar: typeof import('./src/components/admin/AdminBar.vue')['default']
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     AppsHome: typeof import('./src/components/apps/AppsHome.vue')['default']
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     CatIDLoginForm: typeof import('./src/components/CatIDLoginForm.vue')['default']
+    DashboardNodeTile: typeof import('./src/components/admin/DashboardNodeTile.vue')['default']
+    DashboardTile: typeof import('./src/components/admin/DashboardTile.vue')['default']
     DefaultLoginForm: typeof import('./src/components/DefaultLoginForm.vue')['default']
+    Dialog: typeof import('primevue/dialog')['default']
     FloatLabel: typeof import('primevue/floatlabel')['default']
     Image: typeof import('primevue/image')['default']
     InputGroup: typeof import('primevue/inputgroup')['default']
@@ -22,11 +26,16 @@ declare module 'vue' {
     LoginComponent: typeof import('./src/components/LoginComponent.vue')['default']
     LoginForm: typeof import('./src/components/LoginForm.vue')['default']
     Message: typeof import('primevue/message')['default']
+    NodeView: typeof import('./src/components/admin/NodeView.vue')['default']
+    Panel: typeof import('primevue/panel')['default']
     Password: typeof import('primevue/password')['default']
     ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Stepper: typeof import('primevue/stepper')['default']
+    StorageNodeTile: typeof import('./src/components/admin/StorageNodeTile.vue')['default']
+    StorageTile: typeof import('./src/components/admin/StorageTile.vue')['default']
+    Toast: typeof import('primevue/toast')['default']
     Toolbar: typeof import('primevue/toolbar')['default']
   }
 }

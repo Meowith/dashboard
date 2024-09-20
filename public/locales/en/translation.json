@@ -4,6 +4,18 @@
     "reg-button": "Register",
     "fail": "Setup failed"
   },
+  "admin": {
+    "nodes": {
+      "storage": "Storage services",
+      "dashboard": "Dashboard services",
+      "add": "Add a new node",
+      "add-generate": "Create a new register code.",
+      "add-tip": "Register your new node with the provided code.",
+      "code-copied": "Copied to your clipboard.",
+      "code-gen-fail": "Code generation",
+      "code-gen-fail-desc": "Could not issue the register code"
+    }
+  },
   "login": {
     "title": "Log in to Meowith",
     "method": "Login Method",

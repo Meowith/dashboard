@@ -3,7 +3,7 @@ import {useNodesStore, usePreferenceStore} from "@/stores/counter";
 import type {NodeMap} from '@/stores/counter'
 import type {Reactive} from "vue";
 
-let nodes: Reactive<NodeMap>;
+export let nodes: Reactive<NodeMap>;
 
 export function init_api_access() {
     let store = usePreferenceStore();
@@ -20,4 +20,13 @@ export function init_api_access() {
 
 export async function setupRegisterRequest(req: RegisterRequest) {
     await axios.post(nodes.controllers[0].addr + "/api/auth/register", req);
+}
+
+export async function controllerBasicLogin(req: BasicLoginRequest): Promise<AuthResponse> {
+    return (await axios.post(nodes.controllers[0].addr + "/api/public/login/BASIC", {}, {
+        headers: {
+            "username": req.username,
+            "password": req.password
+        }
+    })).data;
 }

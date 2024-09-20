@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 import {useTranslation} from "i18next-vue";
-import {setupRegisterRequest} from "@/service/api-access";
+import {controllerBasicLogin, setupRegisterRequest} from "@/service/api-access";
 import {RegistrationRequest} from "@vue/language-server";
 import {useRouter} from "vue-router";
+import {Axios, isAxiosError} from "axios";
+import {usePreferenceStore} from "@/stores/counter";
 
 const props = defineProps<{
   setup: boolean
@@ -17,6 +19,7 @@ const {t} = useTranslation()
 const loading = ref(false)
 const register = ref(props.setup)
 const router = useRouter();
+const preferences = usePreferenceStore()
 
 function validatePassword() {
   if (register.value && passwordConfirm.value != password.value) {
@@ -27,10 +30,28 @@ function validatePassword() {
 }
 
 async function performLogin() {
+  loading.value = true;
   if (register.value) {
     return await performRegister()
   }
-  loading.value = true;
+
+  let req: BasicLoginRequest = {
+    password: password.value, username: username.value
+  }
+
+  try {
+    // dashboard login TODO
+    throw Error()
+  } catch (e) {
+    // if (isAxiosError(e)) {
+    //   if (!e.response && !e.request) {
+        let response = await controllerBasicLogin(req);
+        preferences.preferences.token = response.token;
+        await router.push({path: '/admin'})
+      // }
+    // }
+  }
+  loading.value = false;
 }
 
 async function performRegister() {

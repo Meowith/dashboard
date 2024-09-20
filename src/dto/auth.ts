@@ -3,7 +3,7 @@ interface RegisterRequest {
     password: string;
 }
 
-interface LoginRequest {
+interface BasicLoginRequest {
     username: string;
     password: string;
 }
