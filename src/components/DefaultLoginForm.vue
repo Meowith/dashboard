@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {useTranslation} from "i18next-vue";
+import {setupRegisterRequest} from "@/service/api-access";
+import {RegistrationRequest} from "@vue/language-server";
+import {useRouter} from "vue-router";
+
 const props = defineProps<{
   setup: boolean
 }>()
@@ -8,17 +12,47 @@ const props = defineProps<{
 const username = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
+const errorMessage = ref('');
 const {t} = useTranslation()
 const loading = ref(false)
 const register = ref(props.setup)
+const router = useRouter();
+
+function validatePassword() {
+  if (register.value && passwordConfirm.value != password.value) {
+    errorMessage.value = t('login.error.password-mismatch')
+    return false
+  }
+  return true
+}
 
 async function performLogin() {
+  if (register.value) {
+    return await performRegister()
+  }
   loading.value = true;
 }
 
 async function performRegister() {
+  if (!validatePassword()) return
   loading.value = true;
+  let req: RegisterRequest = {
+    password: password.value, username: username.value,
+  }
+  if (props.setup) {
+    try {
+      await setupRegisterRequest(req)
+    } catch (error) {
+      errorMessage.value = t('setup.fail') + error
+    }
+  }
+  loading.value = false;
+  await router.push({path: '/login'})
 }
+
+watch(username, () => errorMessage.value = '')
+watch(password, () => errorMessage.value = '')
+watch(passwordConfirm, () => errorMessage.value = '')
 
 </script>
 
@@ -58,7 +92,9 @@ async function performRegister() {
           t('login.basic.register-button')
         }}</small>
     </div>
-    <Button icon="pi pi-arrow-right" class="self-end" :label="t(register ? 'setup.reg-button' : 'login.button')" :loading="loading"
+    <Message severity="error" v-if="errorMessage">{{ errorMessage }}</Message>
+    <Button icon="pi pi-arrow-right" class="self-end" :label="t(register ? 'setup.reg-button' : 'login.button')"
+            :loading="loading"
             @click="performLogin"></Button>
   </div>
 </template>

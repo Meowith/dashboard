@@ -11,7 +11,7 @@ export function init_api_access() {
     nodes = nodeStore.nodes
 
     axios.interceptors.request.use(function (config) {
-        config.headers.common["Authorization"] = "Bearer " + store.preferences.token;
+        config.headers["Authorization"] = "Bearer " + store.preferences.token;
         return config;
     }, function (error) {
         return Promise.reject(error);

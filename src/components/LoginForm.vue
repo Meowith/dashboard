@@ -4,7 +4,9 @@ import LoginComponent from "@/components/LoginComponent.vue";
 
 <template>
   <Card class="w-2/3 max-w-md border-neutral-800 border">
-    <LoginComponent :setup="false" />
+    <template #content>
+      <LoginComponent :setup="false"/>
+    </template>
   </Card>
 </template>
 

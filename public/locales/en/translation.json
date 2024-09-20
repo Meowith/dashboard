@@ -1,7 +1,8 @@
 {
   "setup": {
     "register": "Register your account",
-    "reg-button": "Register"
+    "reg-button": "Register",
+    "fail": "Setup failed"
   },
   "login": {
     "title": "Log in to Meowith",
@@ -17,6 +18,9 @@
     },
     "catid": {
       "prompt": "Log in using CatID"
+    },
+    "error": {
+      "password-mismatch": "The passwords must match"
     }
   }
 }
