@@ -8,6 +8,7 @@ import router from './router'
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import ToastService from 'primevue/toastservice';
+import Tooltip from 'primevue/tooltip';
 
 import {i18next} from '@/i18n';
 import I18NextVue from 'i18next-vue';
@@ -24,4 +25,7 @@ app
     .use(I18NextVue, {i18next, rerenderOn: ['added', 'languageChanged']})
     .use(createPinia())
     .use(router)
-    .mount('#app')
+
+app.directive('tooltip', Tooltip)
+
+app.mount('#app')

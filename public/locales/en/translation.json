@@ -14,6 +14,15 @@
       "code-copied": "Copied to your clipboard.",
       "code-gen-fail": "Code generation",
       "code-gen-fail-desc": "Could not issue the register code"
+    },
+    "tiles": {
+      "registered": "Registered",
+      "last-seen": "Last heartbeat date",
+      "storage": {
+        "max": "Max:",
+        "used": "Used:",
+        "storage": "Storage space"
+      }
     }
   },
   "login": {

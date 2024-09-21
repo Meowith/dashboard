@@ -1,11 +1,12 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: true,
+  darkMode: 'media',
+  safelist: ["dark"],
   theme: {
     extend: {},
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('tailwindcss-primeui')],
 }
