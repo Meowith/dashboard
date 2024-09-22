@@ -5,7 +5,7 @@ import App from "@/App.vue";
 <template>
   <Suspense>
     <template #default>
-      <App />
+      <App class="min-h-screen"/>
     </template>
     <template #fallback>
       <div class="w-screen h-screen flex justify-center items-center border-box">

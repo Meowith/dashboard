@@ -1,7 +1,7 @@
 export interface App {
-    id: string
-    name: string
-    quota: number
-    created: string
-    last_modified: string
+    id: string,
+    name: string,
+    quota: number,
+    created: Date,
+    last_modified: Date,
 }

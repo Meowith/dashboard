@@ -7,6 +7,7 @@ import StepPanels from 'primevue/steppanels';
 import Step from 'primevue/step';
 import StepPanel from 'primevue/steppanel';
 import CatIDLoginForm from "@/components/CatIDLoginForm.vue";
+
 defineProps<{
   setup: boolean
 }>()

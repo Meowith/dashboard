@@ -1,11 +1,39 @@
 <script setup lang="ts">
 import AdminBar from "@/components/admin/AdminBar.vue";
+import {fetchCurrentUserController} from "@/service/user";
+import {GlobalRole, useStateStore} from "@/stores/state";
+import {ref} from "vue";
+import {useTranslation} from "i18next-vue";
+
+const {t} = useTranslation()
+
+const loading = ref(true);
+const cantAccess = ref(false)
+
+try {
+  await fetchCurrentUserController()
+  const {globalUser} = useStateStore()
+  if (globalUser!.globalRole != GlobalRole.Admin) {
+    cantAccess.value = true
+  }
+  loading.value = false;
+} catch (e) {
+  cantAccess.value = true
+  loading.value = false
+}
+
 </script>
 
 <template>
-  <div class="m-2 flex flex-col gap-2">
+  <div class="p-4 flex flex-col gap-4" v-if="!loading && !cantAccess">
     <AdminBar/>
     <router-view/>
+  </div>
+  <div class="flex justify-center items-center w-full h-full" v-else-if="!cantAccess">
+    <ProgressSpinner/>
+  </div>
+  <div class="flex justify-center items-center w-full h-full" v-else-if="cantAccess">
+    <Message>{{ t('admin.403') }}</Message>
   </div>
 </template>
 

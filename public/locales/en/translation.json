@@ -2,9 +2,11 @@
   "setup": {
     "register": "Register your account",
     "reg-button": "Register",
-    "fail": "Setup failed"
+    "fail": "Setup failed",
+    "title": "Set up your meowith administrator account"
   },
   "admin": {
+    "403": "Forbidden",
     "nodes": {
       "storage": "Storage services",
       "dashboard": "Dashboard services",
@@ -23,6 +25,9 @@
         "used": "Used:",
         "storage": "Storage space"
       }
+    },
+    "nav":{
+      "home": "Home"
     }
   },
   "login": {
@@ -41,7 +46,28 @@
       "prompt": "Log in using CatID"
     },
     "error": {
-      "password-mismatch": "The passwords must match"
+      "password-mismatch": "The passwords must match",
+      "password-incorrect": "The provided login and/or password is incorrect"
+    }
+  },
+  "home": {
+    "nav": {
+      "admin": "Admin"
+    },
+    "menu": {
+      "logout": "Logout"
+    },
+    "app": {
+      "create": {
+        "header": "Create an app",
+        "name": "name"
+      },
+      "tile": {
+        "created": "Created",
+        "quota": "Quota",
+        "modified": "Modified",
+        "manage": "Manage"
+      }
     }
   }
 }

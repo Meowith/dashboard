@@ -13,6 +13,7 @@ import Tooltip from 'primevue/tooltip';
 import {i18next} from '@/i18n';
 import I18NextVue from 'i18next-vue';
 import LoadingScreen from "./LoadingScreen.vue"
+import Ripple from "primevue/ripple";
 
 const app = createApp(LoadingScreen);
 app
@@ -27,5 +28,6 @@ app
     .use(router)
 
 app.directive('tooltip', Tooltip)
+app.directive('ripple', Ripple)
 
 app.mount('#app')

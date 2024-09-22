@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 import {useTranslation} from "i18next-vue";
-import {controllerBasicLogin, setupRegisterRequest} from "@/service/api-access";
-import {RegistrationRequest} from "@vue/language-server";
+import {controllerBasicLogin, dashboardBasicLogin, setupRegisterRequest} from "@/service/api-access";
 import {useRouter} from "vue-router";
-import {Axios, isAxiosError} from "axios";
-import {usePreferenceStore} from "@/stores/counter";
+import {usePreferenceStore} from "@/stores/preferences";
+import {isAxiosError} from "axios";
 
 const props = defineProps<{
   setup: boolean
@@ -40,16 +39,22 @@ async function performLogin() {
   }
 
   try {
-    // dashboard login TODO
-    throw Error()
+    let response = await controllerBasicLogin(req);
+    preferences.preferences.token = response.token;
+    await router.push({path: '/'})
   } catch (e) {
-    // if (isAxiosError(e)) {
-    //   if (!e.response && !e.request) {
-        let response = await controllerBasicLogin(req);
-        preferences.preferences.token = response.token;
-        await router.push({path: '/admin'})
-      // }
-    // }
+    if (isAxiosError(e)) {
+      if (!e.response && !e.request) {
+        try {
+          let response = await controllerBasicLogin(req);
+          preferences.preferences.token = response.token;
+          await router.push({path: '/admin'})
+        } catch (e) {
+          errorMessage.value = t('login.error.password-incorrect')
+        }
+      }
+    }
+    errorMessage.value = t('login.error.password-incorrect')
   }
   loading.value = false;
 }
