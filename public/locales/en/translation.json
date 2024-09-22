@@ -10,6 +10,10 @@
     "nodes": {
       "storage": "Storage services",
       "dashboard": "Dashboard services",
+      "storages": "Storage nodes:",
+      "dashboards": "Dashboard nodes:",
+      "overview": "Overview",
+      "nodes": "Nodes",
       "add": "Add a new node",
       "add-generate": "Create a new register code.",
       "add-tip": "Register your new node with the provided code.",
