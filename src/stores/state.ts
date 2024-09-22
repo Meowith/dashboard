@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {ref} from "vue";
+import type {OwnApps} from "@/models/entity";
 
 export enum GlobalRole {
     User = 1,
@@ -16,13 +16,18 @@ export interface GlobalUserInfo {
 
 export const useStateStore = defineStore('state', {
         state: () => ({
-            globalUser: undefined
+            globalUser: undefined,
+            ownApps: undefined
         } as {
-            globalUser: GlobalUserInfo | undefined
+            globalUser: GlobalUserInfo | undefined,
+            ownApps: OwnApps | undefined,
         }),
         actions: {
             setUser(user: GlobalUserInfo | undefined) {
                 this.globalUser = user;
+            },
+            setApps(ownedApps: OwnApps | undefined) {
+                this.ownApps = ownedApps;
             }
         }
     }

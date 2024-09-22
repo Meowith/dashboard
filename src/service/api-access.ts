@@ -4,7 +4,15 @@ import type {Reactive} from "vue";
 import {type NodeMap, useNodesStore} from "@/stores/nodes";
 import {useStateStore} from "@/stores/state";
 
-export let nodes: Reactive<NodeMap>;
+let nodes: Reactive<NodeMap>;
+
+export function controllerAddress(path: string): string {
+    return nodes.controllers[0].addr + path
+}
+
+export function dashboardAddress(path: string): string {
+    return nodes.dashboards[0].addr + path
+}
 
 export function initApiAccess() {
     let store = usePreferenceStore();
@@ -27,11 +35,11 @@ export function logout() {
 }
 
 export async function setupRegisterRequest(req: RegisterRequest) {
-    await axios.post(nodes.controllers[0].addr + "/api/auth/register", req);
+    await axios.post(controllerAddress("/api/auth/register"), req);
 }
 
 export async function controllerBasicLogin(req: BasicLoginRequest): Promise<AuthResponse> {
-    return (await axios.post(nodes.controllers[0].addr + "/api/public/login/BASIC", {}, {
+    return (await axios.post(controllerAddress('/api/public/login/BASIC'), {}, {
         headers: {
             "username": req.username,
             "password": req.password
@@ -40,7 +48,7 @@ export async function controllerBasicLogin(req: BasicLoginRequest): Promise<Auth
 }
 
 export async function dashboardBasicLogin(req: BasicLoginRequest): Promise<AuthResponse> {
-    return (await axios.post(nodes.dashboards[0].addr + "/api/public/login/BASIC", {}, {
+    return (await axios.post(dashboardAddress("/api/public/login/BASIC"), {}, {
         headers: {
             "username": req.username,
             "password": req.password

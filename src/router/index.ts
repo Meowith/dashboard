@@ -19,10 +19,12 @@ const router = createRouter({
             children: [
                 {
                     path: '',
+                    name: 'appList',
                     component: AppsHome,
                 },
                 {
                     path: 'apps/:id',
+                    name: 'appMgmt',
                     component: AppManager,
                 }
             ]
@@ -34,6 +36,7 @@ const router = createRouter({
             children: [
                 {
                     path: '',
+                    name: 'nodeView',
                     component: NodeView,
                 }
             ]

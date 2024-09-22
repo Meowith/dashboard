@@ -37,5 +37,5 @@ export interface NodeStatus {
 
 export enum MicroserviceType {
     StorageNode = 1,
-    PanelApi = 2,
+    Dashboard = 2,
 }

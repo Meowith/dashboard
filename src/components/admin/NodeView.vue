@@ -29,7 +29,7 @@ async function fetchNodes() {
           used_space: node.used_space || 0,
           last_beat: new Date(node.last_beat)
         });
-      } else {
+      } else if (node.microservice_type == MicroserviceType.Dashboard) {
         new_dashboards.push({
           access_token_issued_at: new Date(node.access_token_issued_at),
           addr: node.address,

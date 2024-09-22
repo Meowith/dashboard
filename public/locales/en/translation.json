@@ -52,7 +52,8 @@
   },
   "home": {
     "nav": {
-      "admin": "Admin"
+      "admin": "Admin",
+      "home": "Home"
     },
     "menu": {
       "logout": "Logout"
@@ -69,5 +70,8 @@
         "manage": "Manage"
       }
     }
+  },
+  "app": {
+    "404": "This app was not found."
   }
 }
