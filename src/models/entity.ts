@@ -1,8 +1,9 @@
 import type {AppDto, MemberDto, OwnAppDto} from "@/dto/app";
-import {listOwnedApps} from "@/service/app-management";
+import type {BucketDto} from "@/dto/bucket";
 
 export interface App {
     id: string,
+    owner_id: string,
     name: string,
     quota: number,
     created: Date,
@@ -14,15 +15,11 @@ export interface OwnApps {
     members: MemberDto[]
 }
 
-export function appFrom(item: AppDto): App {
-    return {
-        created: new Date(item.created),
-        id: item.id,
-        last_modified: new Date(item.last_modified),
-        name: item.name,
-        quota: item.quota
-    }
-}
+export const appFrom = ({ created, last_modified, ...rest }: AppDto): App => ({
+    ...rest,
+    created: new Date(created),
+    last_modified: new Date(last_modified)
+});
 
 export function fromOwnedApps(owned: OwnAppDto): OwnApps {
     let appList: (App & { is_member: boolean })[] = []
@@ -36,4 +33,23 @@ export function fromOwnedApps(owned: OwnAppDto): OwnApps {
     return {
         apps: appList, members: owned.member_of.map(x => x.member)
     }
+}
+
+export const bucketFrom = ({created, last_modified, ...rest}: BucketDto): Bucket => ({
+    ...rest,
+    created: new Date(created),
+    last_modified: new Date(last_modified)
+});
+
+export interface Bucket {
+    app_id: string,
+    id: string,
+    name: string,
+    encrypted: boolean,
+    atomic_upload: boolean,
+    quota: number,
+    file_count: number,
+    space_taken: number,
+    created: Date,
+    last_modified: Date,
 }

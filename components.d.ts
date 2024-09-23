@@ -14,9 +14,11 @@ declare module 'vue' {
     AppTile: typeof import('./src/components/apps/AppTile.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     Badge: typeof import('primevue/badge')['default']
+    BucketTIle: typeof import('./src/components/buckets/BucketTIle.vue')['default']
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     CatIDLoginForm: typeof import('./src/components/CatIDLoginForm.vue')['default']
+    ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     DashboardNodeTile: typeof import('./src/components/admin/DashboardNodeTile.vue')['default']
     DashboardTile: typeof import('./src/components/admin/DashboardTile.vue')['default']
     DefaultLoginForm: typeof import('./src/components/DefaultLoginForm.vue')['default']
@@ -47,5 +49,6 @@ declare module 'vue' {
     StorageTile: typeof import('./src/components/admin/StorageTile.vue')['default']
     Toast: typeof import('primevue/toast')['default']
     Toolbar: typeof import('primevue/toolbar')['default']
+    VirtualScroller: typeof import('primevue/virtualscroller')['default']
   }
 }

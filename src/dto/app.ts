@@ -1,5 +1,6 @@
 export interface AppDto {
     id: string,
+    owner_id: string,
     name: string,
     quota: number,
     created: string,
@@ -24,4 +25,7 @@ export interface OwnAppDto {
 
 export interface CreateAppRequest {
     name: string,
+}
+export interface DeleteApplicationRequest {
+    id: string
 }

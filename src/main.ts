@@ -9,11 +9,12 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
+import ConfirmationService from 'primevue/confirmationservice';
+import Ripple from "primevue/ripple";
 
 import {i18next} from '@/i18n';
 import I18NextVue from 'i18next-vue';
 import LoadingScreen from "./LoadingScreen.vue"
-import Ripple from "primevue/ripple";
 
 const app = createApp(LoadingScreen);
 app
@@ -25,6 +26,7 @@ app
     })
     .use(I18NextVue, {i18next, rerenderOn: ['added', 'languageChanged']})
     .use(createPinia())
+    .use(ConfirmationService)
     .use(router)
 
 app.directive('tooltip', Tooltip)

@@ -2,11 +2,9 @@
 import {ref} from "vue";
 import {useTranslation} from "i18next-vue";
 import {useToast} from "primevue/usetoast";
-import Toast from "primevue/toast";
-import {fetchNodeRegisterCode} from "@/service/node-management";
+import {createNodeRegisterCode} from "@/service/node-management";
 import copy from "copy-to-clipboard";
 import type {MenuItem} from "primevue/menuitem";
-import {useRouter} from "vue-router";
 
 const addNodeDialog = ref(false)
 const {t} = useTranslation();
@@ -15,10 +13,12 @@ const codeLoading = ref(false)
 
 const toast = useToast();
 
+const emit = defineEmits(['new-code'])
 async function createCode() {
   codeLoading.value = true
   try {
-    registerCode.value = (await fetchNodeRegisterCode()).code
+    registerCode.value = (await createNodeRegisterCode()).code
+    emit('new-code')
   } catch (_) {
     toast.add({
       severity: "error",
@@ -40,7 +40,6 @@ function doCopy() {
   }
 }
 
-const router = useRouter()
 const menuItems: MenuItem[] = [
   {
     label: t('admin.nav.home'),
@@ -55,7 +54,6 @@ const menuItems: MenuItem[] = [
   <Menubar :model="menuItems">
     <template #end>
       <Button icon="pi pi-plus" aria-label="Add" @click="addNodeDialog = true; registerCode = ''"/>
-      <Toast/>
       <Dialog v-model:visible="addNodeDialog" modal :header="t('admin.nodes.add')" :style="{ width: '27.5rem' }">
         <span class="text-surface-500 dark:text-surface-400 block mb-4">{{
             registerCode ? t('admin.nodes.add-tip') : t('admin.nodes.add-generate')

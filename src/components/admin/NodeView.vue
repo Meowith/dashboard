@@ -1,15 +1,19 @@
 <script setup lang="ts">
 
-import {type DashboardNode, MicroserviceType, type StorageNode} from "@/dto/admin";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {type DashboardNode, MicroserviceType, type ServiceRegisterCodeDto, type StorageNode} from "@/dto/admin";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import StorageNodeTile from "@/components/admin/StorageNodeTile.vue";
 import DashboardNodeTile from "@/components/admin/DashboardNodeTile.vue";
 import {useTranslation} from "i18next-vue";
-import {fetchNodeStatus} from "@/service/node-management";
+import {deleteNodeRegisterCode, fetchNodeStatus, listNodeRegisterCodes} from "@/service/node-management";
 import {filesize} from "filesize";
 
 const dashboards = ref<DashboardNode[]>([]);
 const nodes = ref<StorageNode[]>([]);
+
+const props = defineProps<{
+  newCode: boolean
+}>()
 
 const {t} = useTranslation();
 let timer: ReturnType<typeof setInterval>;
@@ -46,10 +50,33 @@ async function fetchNodes() {
   }
 }
 
+const codes = ref<ServiceRegisterCodeDto[]>([]);
+
+async function fetchCodes() {
+  try {
+    codes.value = await listNodeRegisterCodes()
+  } catch (e) {
+  }
+}
+
+async function deleteCode(code: string) {
+  try {
+    await deleteNodeRegisterCode(code)
+    await fetchCodes()
+  } catch (e) {
+  }
+}
+
+watch(() => props.newCode, async () => {
+  await fetchCodes()
+})
+
 fetchNodes()
+fetchCodes()
 onMounted(() => {
   timer = setInterval(async () => {
     await fetchNodes()
+    await fetchCodes()
   }, 60000)
 })
 
@@ -104,12 +131,11 @@ const dashboardsAlive = computed(() => {
   return sum
 })
 
-
 </script>
 
 <template>
   <div class="flex flex-wrap gap-4">
-    <Panel>
+    <Panel class="flex-grow">
       <template #header>
         <div class="col-span-2 text-sm items-center gap-2 flex">
           <i class="pi pi-database"></i>
@@ -126,9 +152,9 @@ const dashboardsAlive = computed(() => {
         </div>
       </div>
     </Panel>
-    <Panel :header="t('admin.nodes.nodes')">
-      <div class="flex flex-row gap-2 items-center">
-        <div class="grid grid-cols-2 h-18 items-center">
+    <Panel :header="t('admin.nodes.nodes')" class="flex-grow">
+      <div class="flex flex-row gap-2 items-center w-full">
+        <div class="grid grid-cols-2 h-18 items-center w-full">
           <span>{{ t('admin.nodes.storages') }}</span>
           <Badge class="ml-2" size="small" :severity="nodesAlive == nodes.length ? 'success' : 'error'">
             {{ nodesAlive }} / {{ nodes.length }}
@@ -140,14 +166,36 @@ const dashboardsAlive = computed(() => {
         </div>
       </div>
     </Panel>
-    <Panel :header="t('admin.nodes.storage')">
-      <div class="flex flex-row flex-wrap gap-2">
-        <StorageNodeTile v-for="node in nodes" :key="node.id" :node="node"/>
+    <Panel :header="t('admin.codes.title')" class="flex-grow">
+      <div class="flex w-full justify-center">
+        <VirtualScroller :items="codes" :itemSize="50"
+                         class="border border-surface-200 dark:border-surface-700 rounded h-40 w-72 sm:w-96">
+          <template v-slot:item="{ item, options }">
+            <div :class="['flex items-center p-2 gap-2', { 'bg-surface-100 dark:bg-surface-800': options.odd }]"
+                 style="height: 50px">
+              <div class="flex flex-col gap-1">
+                <span class="font-mono text-sm">{{ item.code }}</span>
+                <span class="font-thin text-xs">{{ new Date(item.created).toLocaleString() }}</span>
+              </div>
+              <i class="pi pi-check" v-if="item.valid"></i>
+              <i class="pi pi-times" v-else></i>
+              <div class="flex-grow flex justify-end">
+                <Button outlined icon="pi pi-trash" severity="danger" @click="deleteCode(item.code)"
+                        class="justify-self-end"></Button>
+              </div>
+            </div>
+          </template>
+        </VirtualScroller>
       </div>
     </Panel>
-    <Panel :header="t('admin.nodes.dashboard')">
+    <Panel :header="t('admin.nodes.dashboard')" class="flex-grow">
       <div class="flex flex-row flex-wrap gap-2">
         <DashboardNodeTile v-for="node in dashboards" :key="node.id" :node="node"/>
+      </div>
+    </Panel>
+    <Panel :header="t('admin.nodes.storage')" class="flex-grow">
+      <div class="flex flex-row flex-wrap gap-2">
+        <StorageNodeTile v-for="node in nodes" :key="node.id" :node="node"/>
       </div>
     </Panel>
   </div>

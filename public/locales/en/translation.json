@@ -7,6 +7,9 @@
   },
   "admin": {
     "403": "Forbidden",
+    "codes": {
+      "title": "Register codes"
+    },
     "nodes": {
       "storage": "Storage services",
       "dashboard": "Dashboard services",
@@ -30,7 +33,7 @@
         "storage": "Storage space"
       }
     },
-    "nav":{
+    "nav": {
       "home": "Home"
     }
   },
@@ -76,6 +79,21 @@
     }
   },
   "app": {
-    "404": "This app was not found."
+    "404": "This app was not found.",
+    "menu": {
+      "delete": "Delete app",
+      "delete-sure": "Are sure you want to delete this app?",
+      "delete-toast": {
+        "success-title": "App deleted",
+        "success-desc": "This application has been deleted",
+        "error-title": "App deletion failed",
+        "error1-desc": "This application could not be deleted, as it still contains buckets.",
+        "error2-desc": "Something went wrong."
+      }
+    }
+  },
+  "confirm": {
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }

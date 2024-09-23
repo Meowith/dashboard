@@ -3,10 +3,11 @@
 import {storeToRefs} from "pinia";
 import {useStateStore} from "@/stores/state";
 import {onMounted, ref} from "vue";
-import {type App, fromOwnedApps} from "@/models/entity";
-import {listOwnedApps} from "@/service/app-management";
+import {type App, type Bucket, bucketFrom, fromOwnedApps} from "@/models/entity";
+import {listBuckets, listOwnedApps} from "@/service/app-management";
 import {useRoute, useRouter} from "vue-router";
 import {useTranslation} from "i18next-vue";
+import BucketTile from "@/components/buckets/BucketTIle.vue";
 
 const {setApps} = useStateStore()
 const route = useRoute();
@@ -19,6 +20,18 @@ async function fetchApps() {
 const {ownApps} = storeToRefs(useStateStore())
 const currentApp = ref<App>()
 const {t} = useTranslation()
+const buckets = ref<Bucket[]>([])
+
+async function fetchBuckets() {
+  try {
+    let new_buckets = await listBuckets(currentApp.value!.id)
+    buckets.value = []
+    new_buckets.buckets.forEach(bucket => {
+      buckets.value.push(bucketFrom(bucket))
+    })
+  } catch (e) {
+  }
+}
 
 onMounted(async () => {
   if (route.name == 'appMgmt') {
@@ -29,6 +42,7 @@ onMounted(async () => {
       app = ownApps.value?.apps.find(x => x.id == id)
     }
     currentApp.value = app
+    await fetchBuckets()
   }
 })
 
@@ -40,7 +54,7 @@ onMounted(async () => {
     <Button icon="pi pi-home" @click="router.push({path:'/'})"></Button>
   </div>
   <div v-else>
-    {{ currentApp }}
+    <BucketTile :bucket="bucket" v-for="bucket in buckets" :key="bucket.id"/>
   </div>
 </template>
 

@@ -39,3 +39,9 @@ export enum MicroserviceType {
     StorageNode = 1,
     Dashboard = 2,
 }
+
+export interface ServiceRegisterCodeDto {
+    code: string,
+    created: string,
+    valid: boolean
+}
