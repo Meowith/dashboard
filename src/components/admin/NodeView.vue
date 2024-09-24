@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {type DashboardNode, MicroserviceType, type ServiceRegisterCodeDto, type StorageNode} from "@/dto/admin";
 import {computed, onMounted, onUnmounted, ref, watch} from "vue";
@@ -156,20 +156,20 @@ const dashboardsAlive = computed(() => {
       <div class="flex flex-row gap-2 items-center w-full">
         <div class="grid grid-cols-2 h-18 items-center w-full">
           <span>{{ t('admin.nodes.storages') }}</span>
-          <Badge class="ml-2" size="small" :severity="nodesAlive == nodes.length ? 'success' : 'error'">
+          <Badge :severity="nodesAlive == nodes.length ? 'success' : 'error'" class="ml-2" size="small">
             {{ nodesAlive }} / {{ nodes.length }}
           </Badge>
           <span>{{ t('admin.nodes.dashboards') }}</span>
-          <Badge class="ml-2" size="small" :severity="dashboardsAlive == dashboards.length ? 'success' : 'error'">
+          <Badge :severity="dashboardsAlive == dashboards.length ? 'success' : 'error'" class="ml-2" size="small">
             {{ dashboardsAlive }} / {{ dashboards.length }}
           </Badge>
         </div>
       </div>
     </Panel>
     <Panel :header="t('admin.codes.title')" class="flex-grow">
-      <div class="flex w-full justify-center">
-        <VirtualScroller :items="codes" :itemSize="50"
-                         class="border border-surface-200 dark:border-surface-700 rounded h-40 w-72 sm:w-96">
+      <div class="flex w-full justify-center h-full">
+        <VirtualScroller :itemSize="50" :items="codes"
+                         class="border border-surface-200 dark:border-surface-700 rounded min-h-40 w-72 sm:w-96 h-full">
           <template v-slot:item="{ item, options }">
             <div :class="['flex items-center p-2 gap-2', { 'bg-surface-100 dark:bg-surface-800': options.odd }]"
                  style="height: 50px">
@@ -177,11 +177,11 @@ const dashboardsAlive = computed(() => {
                 <span class="font-mono text-sm">{{ item.code }}</span>
                 <span class="font-thin text-xs">{{ new Date(item.created).toLocaleString() }}</span>
               </div>
-              <i class="pi pi-check" v-if="item.valid"></i>
-              <i class="pi pi-times" v-else></i>
+              <i v-if="item.valid" class="pi pi-check"></i>
+              <i v-else class="pi pi-times"></i>
               <div class="flex-grow flex justify-end">
-                <Button outlined icon="pi pi-trash" severity="danger" @click="deleteCode(item.code)"
-                        class="justify-self-end"></Button>
+                <Button class="justify-self-end" icon="pi pi-trash" outlined severity="danger"
+                        @click="deleteCode(item.code)"></Button>
               </div>
             </div>
           </template>
@@ -190,12 +190,12 @@ const dashboardsAlive = computed(() => {
     </Panel>
     <Panel :header="t('admin.nodes.dashboard')" class="flex-grow">
       <div class="flex flex-row flex-wrap gap-2">
-        <DashboardNodeTile v-for="node in dashboards" :key="node.id" :node="node"/>
+        <DashboardNodeTile v-for="node in dashboards" :key="node.id" :node="node" class="flex-grow"/>
       </div>
     </Panel>
     <Panel :header="t('admin.nodes.storage')" class="flex-grow">
       <div class="flex flex-row flex-wrap gap-2">
-        <StorageNodeTile v-for="node in nodes" :key="node.id" :node="node"/>
+        <StorageNodeTile v-for="node in nodes" :key="node.id" :node="node" class="flex-grow"/>
       </div>
     </Panel>
   </div>

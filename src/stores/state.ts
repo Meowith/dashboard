@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import type {OwnApps} from "@/models/entity";
+import type {Bucket, OwnApps} from "@/models/entity";
 
 export enum GlobalRole {
     User = 1,
@@ -17,10 +17,12 @@ export interface GlobalUserInfo {
 export const useStateStore = defineStore('state', {
         state: () => ({
             globalUser: undefined,
-            ownApps: undefined
+            ownApps: undefined,
+            currentBuckets: []
         } as {
             globalUser: GlobalUserInfo | undefined,
             ownApps: OwnApps | undefined,
+            currentBuckets: Bucket[],
         }),
         actions: {
             setUser(user: GlobalUserInfo | undefined) {
@@ -28,6 +30,9 @@ export const useStateStore = defineStore('state', {
             },
             setApps(ownedApps: OwnApps | undefined) {
                 this.ownApps = ownedApps;
+            },
+            setBuckets(buckets: Bucket[]) {
+                this.currentBuckets = buckets;
             }
         }
     }

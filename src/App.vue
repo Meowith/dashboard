@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {i18nextPromise} from "@/i18n";
 import {initApiAccess} from "@/service/api-access";
 
@@ -7,7 +7,7 @@ await i18nextPromise;
 </script>
 
 <template>
-  <RouterView />
+  <RouterView/>
 </template>
 
 <style scoped>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {fromOwnedApps} from "@/models/entity";
 import AppTile from "@/components/apps/AppTile.vue";
 import {onMounted, watch} from "vue";
@@ -25,8 +25,8 @@ onMounted(fetchApps)
 </script>
 
 <template>
-  <div class="flex flex-wrap flex-row gap-4" v-if="ownApps">
-    <AppTile v-for="app in ownApps!.apps" :key="app.id" :app="app"/>
+  <div v-if="ownApps" class="flex flex-wrap flex-row gap-4">
+    <AppTile v-for="app in ownApps!.apps" :key="app.id" :app="app" class="flex-grow"/>
   </div>
 </template>
 

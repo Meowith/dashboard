@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type {DashboardNode} from "@/dto/admin";
 import NodeTile from "@/components/admin/NodeTile.vue";
 

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useTranslation} from "i18next-vue";
 import DefaultLoginForm from "@/components/DefaultLoginForm.vue";
 import {ref} from "vue";
@@ -27,14 +27,14 @@ const loginMethods = ref([
       <Step value="2">{{ t(setup ? 'setup.register' : 'login.title') }}</Step>
     </StepList>
     <StepPanels>
-      <StepPanel value="1" class="flex justify-center items-center flex-col gap-6">
-        <p>{{t('login.choose-method')}}</p>
-        <Listbox v-model="selectedLoginMethod" :options="loginMethods" optionLabel="name" checkmark
-                 :highlightOnSelect="false" class="w-full"/>
-        <Button icon="pi pi-arrow-right" :disabled="!selectedLoginMethod" @click="step++"></Button>
+      <StepPanel class="flex justify-center items-center flex-col gap-6" value="1">
+        <p>{{ t('login.choose-method') }}</p>
+        <Listbox v-model="selectedLoginMethod" :highlightOnSelect="false" :options="loginMethods" checkmark
+                 class="w-full" optionLabel="name"/>
+        <Button :disabled="!selectedLoginMethod" icon="pi pi-arrow-right" @click="step++"></Button>
       </StepPanel>
       <StepPanel value="2">
-        <DefaultLoginForm :setup="setup" v-if="selectedLoginMethod?.name === 'Meowith'"/>
+        <DefaultLoginForm v-if="selectedLoginMethod?.name === 'Meowith'" :setup="setup"/>
         <CatIDLoginForm v-if="selectedLoginMethod?.name === 'CatID'"/>
       </StepPanel>
     </StepPanels>

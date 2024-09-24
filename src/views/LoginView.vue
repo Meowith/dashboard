@@ -1,11 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import LoginForm from "@/components/LoginForm.vue";
 </script>
 
 <template>
-<div class="w-full h-full flex justify-center items-center">
-  <LoginForm/>
-</div>
+  <div class="w-full h-full flex justify-center items-center">
+    <LoginForm/>
+  </div>
 </template>
 
 <style scoped>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import App from "@/App.vue";
 </script>
 
@@ -9,8 +9,8 @@ import App from "@/App.vue";
     </template>
     <template #fallback>
       <div class="w-screen h-screen flex justify-center items-center border-box">
-        <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent"
-                         animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+        <ProgressSpinner animationDuration=".5s" aria-label="Custom ProgressSpinner" fill="transparent"
+                         strokeWidth="8" style="width: 50px; height: 50px"/>
       </div>
     </template>
   </Suspense>

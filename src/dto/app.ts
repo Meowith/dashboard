@@ -26,6 +26,7 @@ export interface OwnAppDto {
 export interface CreateAppRequest {
     name: string,
 }
+
 export interface DeleteApplicationRequest {
     id: string
 }

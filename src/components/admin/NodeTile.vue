@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type {DashboardNode, StorageNode} from "@/dto/admin";
 import {useTranslation} from "i18next-vue";
 import {computed} from "vue";
@@ -26,8 +26,8 @@ const badgeSeverity = computed(() => {
       <div class="flex flex-col w-full">
         <div class="flex flex-row items-center w-full">
           <span class="flex-grow">{{ node.addr }}</span>
-          <Badge v-tooltip="t('admin.tiles.last-seen')" :value="node.last_beat.toLocaleString()"
-                 class="justify-self-end" size="small" :severity="badgeSeverity"></Badge>
+          <Badge v-tooltip="t('admin.tiles.last-seen')" :severity="badgeSeverity"
+                 :value="node.last_beat.toLocaleString()" class="justify-self-end" size="small"></Badge>
         </div>
         <span class="font-thin text-xs text-surface-500 dark:text-surface-400">{{ node.id }}</span>
       </div>

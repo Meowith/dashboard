@@ -1,5 +1,6 @@
 import type {AppDto, MemberDto, OwnAppDto} from "@/dto/app";
 import type {BucketDto} from "@/dto/bucket";
+import type {ScopedPermission, UserRoleDTO} from "@/dto/role";
 
 export interface App {
     id: string,
@@ -15,7 +16,7 @@ export interface OwnApps {
     members: MemberDto[]
 }
 
-export const appFrom = ({ created, last_modified, ...rest }: AppDto): App => ({
+export const appFrom = ({created, last_modified, ...rest}: AppDto): App => ({
     ...rest,
     created: new Date(created),
     last_modified: new Date(last_modified)
@@ -50,6 +51,20 @@ export interface Bucket {
     quota: number,
     file_count: number,
     space_taken: number,
+    created: Date,
+    last_modified: Date,
+}
+
+export const userRoleFrom = ({created, last_modified, ...rest}: UserRoleDTO): UserRole => ({
+    ...rest,
+    created: new Date(created),
+    last_modified: new Date(last_modified)
+});
+
+export interface UserRole {
+    app_id: string,
+    name: string,
+    scopes: ScopedPermission[],
     created: Date,
     last_modified: Date,
 }

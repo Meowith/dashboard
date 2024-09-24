@@ -5,9 +5,11 @@ import SetupView from "@/views/SetupView.vue";
 import AppsHome from "@/components/apps/AppsHome.vue";
 import AdminView from "@/views/AdminView.vue";
 import NodeView from "@/components/admin/NodeView.vue";
-import {useStateStore} from "@/stores/state";
 import {usePreferenceStore} from "@/stores/preferences";
 import AppManager from "@/components/apps/AppManager.vue";
+import UserManagement from "@/components/users/UserManagement.vue";
+import TokenManagement from "@/components/tokens/TokenManagement.vue";
+import RoleManagement from "@/components/roles/RoleManagement.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +28,21 @@ const router = createRouter({
                     path: 'apps/:id',
                     name: 'appMgmt',
                     component: AppManager,
+                },
+                {
+                    path: 'apps/:id/users',
+                    name: 'appUserMgmt',
+                    component: UserManagement,
+                },
+                {
+                    path: 'apps/:id/roles',
+                    name: 'appRoleMgmt',
+                    component: RoleManagement,
+                },
+                {
+                    path: 'apps/:id/tokens',
+                    name: 'appTokenMgmt',
+                    component: TokenManagement,
                 }
             ]
         },

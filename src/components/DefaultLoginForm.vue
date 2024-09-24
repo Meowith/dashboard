@@ -1,7 +1,7 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ref, watch} from "vue";
 import {useTranslation} from "i18next-vue";
-import {controllerBasicLogin, dashboardBasicLogin, setupRegisterRequest} from "@/service/api-access";
+import {controllerBasicLogin, setupRegisterRequest} from "@/service/api-access";
 import {useRouter} from "vue-router";
 import {usePreferenceStore} from "@/stores/preferences";
 import {isAxiosError} from "axios";
@@ -89,7 +89,7 @@ watch(passwordConfirm, () => errorMessage.value = '')
         <InputGroupAddon>
           <i class="pi pi-user"></i>
         </InputGroupAddon>
-        <InputText placeholer="" type="email" id="username" v-model="username" :disabled="loading"/>
+        <InputText id="username" v-model="username" :disabled="loading" placeholer="" type="email"/>
       </InputGroup>
       <label class="label" for="username">{{ t('login.basic.username') }}</label>
     </FloatLabel>
@@ -98,7 +98,7 @@ watch(passwordConfirm, () => errorMessage.value = '')
         <InputGroupAddon>
           <i class="pi pi-key"></i>
         </InputGroupAddon>
-        <Password id="password" v-model="password" :feedback="false" :disabled="loading"/>
+        <Password id="password" v-model="password" :disabled="loading" :feedback="false"/>
       </InputGroup>
       <label class="label" for="password">{{ t('login.basic.password') }}</label>
     </FloatLabel>
@@ -107,8 +107,8 @@ watch(passwordConfirm, () => errorMessage.value = '')
         <InputGroupAddon>
           <i class="pi pi-key"></i>
         </InputGroupAddon>
-        <Password :invalid="password != passwordConfirm" id="password-2" v-model="passwordConfirm" :feedback="false"
-                  :disabled="loading"/>
+        <Password id="password-2" v-model="passwordConfirm" :disabled="loading" :feedback="false"
+                  :invalid="password != passwordConfirm"/>
       </InputGroup>
       <label class="label" for="password-2">{{ t('login.basic.password-confirm') }}</label>
     </FloatLabel>
@@ -118,9 +118,9 @@ watch(passwordConfirm, () => errorMessage.value = '')
           t('login.basic.register-button')
         }}</small>
     </div>
-    <Message severity="error" v-if="errorMessage">{{ errorMessage }}</Message>
-    <Button icon="pi pi-arrow-right" class="self-end" :label="t(register ? 'setup.reg-button' : 'login.button')"
-            :loading="loading"
+    <Message v-if="errorMessage" severity="error">{{ errorMessage }}</Message>
+    <Button :label="t(register ? 'setup.reg-button' : 'login.button')" :loading="loading" class="self-end"
+            icon="pi pi-arrow-right"
             @click="performLogin"></Button>
   </div>
 </template>

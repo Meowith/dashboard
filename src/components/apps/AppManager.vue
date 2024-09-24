@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {storeToRefs} from "pinia";
 import {useStateStore} from "@/stores/state";
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {type App, type Bucket, bucketFrom, fromOwnedApps} from "@/models/entity";
 import {listBuckets, listOwnedApps} from "@/service/app-management";
 import {useRoute, useRouter} from "vue-router";
@@ -17,10 +17,14 @@ async function fetchApps() {
   setApps(fromOwnedApps(await listOwnedApps()))
 }
 
+const props = defineProps<{
+  refresh: boolean
+}>()
 const {ownApps} = storeToRefs(useStateStore())
 const currentApp = ref<App>()
 const {t} = useTranslation()
 const buckets = ref<Bucket[]>([])
+const {setBuckets} = useStateStore()
 
 async function fetchBuckets() {
   try {
@@ -29,9 +33,14 @@ async function fetchBuckets() {
     new_buckets.buckets.forEach(bucket => {
       buckets.value.push(bucketFrom(bucket))
     })
+    setBuckets(buckets.value)
   } catch (e) {
   }
 }
+
+watch(() => props.refresh, () => {
+  fetchBuckets()
+})
 
 onMounted(async () => {
   if (route.name == 'appMgmt') {
@@ -46,6 +55,10 @@ onMounted(async () => {
   }
 })
 
+onUnmounted(() => {
+  setBuckets([])
+})
+
 </script>
 
 <template>
@@ -53,8 +66,9 @@ onMounted(async () => {
     <Message severity="error">{{ t('app.404') }}</Message>
     <Button icon="pi pi-home" @click="router.push({path:'/'})"></Button>
   </div>
-  <div v-else>
-    <BucketTile :bucket="bucket" v-for="bucket in buckets" :key="bucket.id"/>
+  <div v-else class="flex flex-wrap gap-4">
+    <BucketTile v-for="bucket in buckets" :key="bucket.id" :bucket="bucket" class="flex-grow"
+                @refresh="fetchBuckets()"/>
   </div>
 </template>
 

@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type {App} from "@/models/entity";
 import {useTranslation} from "i18next-vue";
 import {filesize} from "filesize";
 
 defineProps<{
-  app: App
+  app: App & { is_member: boolean }
 }>()
 const {t} = useTranslation()
 </script>
@@ -12,8 +12,8 @@ const {t} = useTranslation()
 <template>
   <panel>
     <template #header>
-      <div class="flex flex-row gap-2 items-center" >
-        <Avatar :label="app.name[0].toUpperCase()" size="large"></Avatar>
+      <div class="flex flex-row gap-2 items-center">
+        <Avatar :icon="'pi ' + (app.is_member ? 'pi-share-alt' : 'pi-shield')"></Avatar>
         <div class="flex flex-col w-full">
           <span class="flex-grow">{{ app.name }}</span>
           <span class="font-thin text-xs text-surface-500 dark:text-surface-400">{{ app.id }}</span>

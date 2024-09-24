@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import AdminBar from "@/components/admin/AdminBar.vue";
 import {fetchCurrentUserController} from "@/service/user";
 import {GlobalRole, useStateStore} from "@/stores/state";
@@ -28,15 +28,15 @@ try {
 </script>
 
 <template>
-  <div class="p-4 flex flex-col gap-4" v-if="!loading && !cantAccess">
+  <div v-if="!loading && !cantAccess" class="p-4 flex flex-col gap-4">
     <Toast/>
     <AdminBar @new-code="newCode = !newCode"/>
     <router-view :newCode="newCode"/>
   </div>
-  <div class="flex justify-center items-center w-full h-full" v-else-if="!cantAccess">
+  <div v-else-if="!cantAccess" class="flex justify-center items-center w-full h-full">
     <ProgressSpinner/>
   </div>
-  <div class="flex justify-center items-center w-full h-full" v-else-if="cantAccess">
+  <div v-else-if="cantAccess" class="flex justify-center items-center w-full h-full">
     <Message>{{ t('admin.403') }}</Message>
   </div>
 </template>

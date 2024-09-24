@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type {StorageNode} from "@/dto/admin";
 import {computed} from "vue";
 import {filesize} from "filesize";

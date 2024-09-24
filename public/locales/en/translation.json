@@ -37,6 +37,22 @@
       "home": "Home"
     }
   },
+  "error": {
+    "generic-title": "An error occurred",
+    "server-code": {
+      "InternalError": "Meowith internal error.",
+      "BadRequest": "Invalid parameters.",
+      "NotFound": "The resource was not found.",
+      "EntityExists": "This entity already exists.",
+      "NoSuchSession": "Such a session does not exist.",
+      "BadAuth": "Invalid credentials.",
+      "InsufficientStorage": "Insufficient storage.",
+      "NotEmpty": "The resource is not empty.",
+      "RangeUnsatisfiable": "The requested range cannot be satisfied."
+    },
+    "client-code": "A client error occurred: {{message}}",
+    "network-error": "Could not send the request."
+  },
   "login": {
     "title": "Log in to Meowith",
     "method": "Login Method",
@@ -60,7 +76,11 @@
   "home": {
     "nav": {
       "admin": "Admin",
-      "home": "Home"
+      "home": "Home",
+      "buckets": "Buckets",
+      "users": "Users",
+      "tokens": "Tokens",
+      "roles": "Roles"
     },
     "menu": {
       "logout": "Logout"
@@ -87,8 +107,46 @@
         "success-title": "App deleted",
         "success-desc": "This application has been deleted",
         "error-title": "App deletion failed",
-        "error1-desc": "This application could not be deleted, as it still contains buckets.",
-        "error2-desc": "Something went wrong."
+        "error1-desc": "This application could not be deleted, as it still contains buckets."
+      }
+    },
+    "bucket": {
+      "tile": {
+        "created": "Created",
+        "storage-used": "Used:",
+        "storage-max": "Quota:",
+        "files": "Files:"
+      },
+      "menu": {
+        "delete": "Delete bucket",
+        "delete-sure": "Are you sure you want to delete this bucket?"
+      },
+      "create": "Create a bucket",
+      "create-name": "Bucket name",
+      "quota": "Quota",
+      "atomic-upload": "Atomic upload",
+      "atomic-desc": "Deletes overwritten files only once the new file has been fully uploaded",
+      "toast": {
+        "success-title": "Bucket created",
+        "success-desc": "The bucket was successfully created",
+        "error-title": "Bucket creation failed",
+        "error-del-title": "Bucket deletion failed",
+        "deleted-title": "Bucket deleted",
+        "deleted-desc": "This bucket was deleted."
+      }
+    },
+    "roles":{
+      "title": "Roles",
+      "create": {
+        "name": "Role name",
+        "header": "Create a new role"
+      },
+      "table-cols": {
+        "name": "Name",
+        "last-modified": "Modified",
+        "created": "Created",
+        "scopes": "Permissions",
+        "action": "Action"
       }
     }
   },

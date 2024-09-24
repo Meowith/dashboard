@@ -24,7 +24,7 @@ async function currentUser(address: string, router: Router) {
                 name: user.name
             });
         } catch (e) {
-            await router.push({path:'/login'})
+            await router.push({path: '/login'})
         }
     }
 }

@@ -2,8 +2,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 import i18next from 'i18next';
 
-const languages = new Map<string, {nativeName: string}>([
-    ['en', { nativeName: 'English'}],
+const languages = new Map<string, { nativeName: string }>([
+    ['en', {nativeName: 'English'}],
 ]);
 
 i18next.init({

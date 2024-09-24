@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import image from '@/assets/catid.svg';
 import {useTranslation} from "i18next-vue";
 
@@ -12,7 +12,7 @@ const {t} = useTranslation();
       <Image :src="image" alt="CatID logo" width="50"/>
       <span>{{ t('login.catid.prompt') }}</span>
     </div>
-    <Button icon="pi pi-arrow-right" class="self-end" :label="t('login.button')"></Button>
+    <Button :label="t('login.button')" class="self-end" icon="pi pi-arrow-right"></Button>
   </div>
 </template>
 
