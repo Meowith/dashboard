@@ -46,6 +46,7 @@ async function doCreateBucket() {
       severity: 'info',
       summary: t('app.bucket.toast.success-title'),
       detail: t('app.bucket.toast.success-desc'),
+      life: 3000
     })
     bucketName.value = ''
     bucketAtomicUpload.value = false

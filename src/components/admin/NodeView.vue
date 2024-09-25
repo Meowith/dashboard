@@ -202,5 +202,4 @@ const dashboardsAlive = computed(() => {
 </template>
 
 <style scoped>
-
 </style>

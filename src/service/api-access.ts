@@ -38,6 +38,10 @@ export async function setupRegisterRequest(req: RegisterRequest) {
     await axios.post(controllerAddress("/api/auth/register"), req);
 }
 
+export async function registerRequest(req: RegisterRequest): Promise<AuthResponse> {
+    return (await axios.post(dashboardAddress("/api/auth/register"), req)).data;
+}
+
 export async function controllerBasicLogin(req: BasicLoginRequest): Promise<AuthResponse> {
     return (await axios.post(controllerAddress('/api/public/login/BASIC'), {}, {
         headers: {

@@ -4,13 +4,13 @@ import type {MenuItem} from "primevue/menuitem";
 import {computed, onMounted, ref, watch} from "vue";
 import {GlobalRole, useStateStore} from "@/stores/state";
 import {useRoute} from "vue-router";
-import {createApp} from "@/service/app-management";
 import {storeToRefs} from "pinia";
 import type {App} from "@/models/entity";
 import UserProfile from "@/components/UserProfile.vue";
 import BarAppManagement from "@/components/appbar/BarAppManagement.vue";
 import CreateBucket from "@/components/appbar/CreateBucket.vue";
 import CreateRole from "@/components/appbar/CreateRole.vue";
+import CreateMember from "@/components/appbar/CreateMember.vue";
 
 const {t} = useTranslation()
 const {globalUser} = useStateStore();
@@ -85,6 +85,7 @@ watch(currentApp, () => {
       <CreateApp v-if="route.name == 'appList'" @refresh="emit('refresh')"/>
       <CreateBucket v-if="route.name == 'appMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
       <CreateRole v-if="route.name == 'appRoleMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
+      <CreateMember v-if="route.name == 'appUserMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
     </template>
     <template #item="{ item, props, }">
       <router-link v-slot="{ href, navigate }" :to="item.route" custom>

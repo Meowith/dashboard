@@ -3,6 +3,6 @@ export const KNOWN_NODES = {
         addr: 'http://127.0.0.1:8080',
     }],
     dashboards: [{
-        addr: 'http://127.0.0.3:8083',
+        addr: 'http://127.0.0.1:8083',
     }]
 }

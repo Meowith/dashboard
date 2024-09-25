@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ref, watch} from "vue";
 import {useTranslation} from "i18next-vue";
-import {controllerBasicLogin, setupRegisterRequest} from "@/service/api-access";
+import {controllerBasicLogin, dashboardBasicLogin, registerRequest, setupRegisterRequest} from "@/service/api-access";
 import {useRouter} from "vue-router";
 import {usePreferenceStore} from "@/stores/preferences";
 import {isAxiosError} from "axios";
@@ -39,7 +39,7 @@ async function performLogin() {
   }
 
   try {
-    let response = await controllerBasicLogin(req);
+    let response = await dashboardBasicLogin(req);
     preferences.preferences.token = response.token;
     await router.push({path: '/'})
   } catch (e) {

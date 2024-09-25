@@ -51,6 +51,7 @@ onMounted(() => {
                 severity: 'info',
                 summary: t('app.bucket.toast.deleted-title'),
                 detail: t('app.bucket.toast.deleted-desc'),
+                life: 3000
               })
               emit('refresh')
             } catch (e) {

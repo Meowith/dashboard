@@ -57,6 +57,7 @@ watch(() => props.currentApp, (v) => {
                 severity: 'info',
                 summary: t('app.menu.delete-toast.success-title'),
                 detail: t('app.menu.delete-toast.success-desc'),
+                life: 3000
               })
               await router.push({path: '/'})
             } catch (e) {
@@ -65,6 +66,7 @@ watch(() => props.currentApp, (v) => {
                   severity: 'info',
                   summary: t('app.menu.delete-toast.error-title'),
                   detail: t('app.menu.delete-toast.error1-desc'),
+                  life: 3000
                 })
               } else {
                 errorToast(toast, e, t('app.menu.delete-toast.error-title'))

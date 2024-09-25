@@ -135,11 +135,21 @@
         "deleted-desc": "This bucket was deleted."
       }
     },
-    "roles":{
+    "members": {
+      "create": {
+        "header": "Add a new member",
+        "name": "Member username"
+      }
+    },
+    "roles": {
       "title": "Roles",
       "create": {
         "name": "Role name",
         "header": "Create a new role"
+      },
+      "toast": {
+        "save-success-title": "Saved",
+        "save-success-desc": "The role was saved successfully."
       },
       "table-cols": {
         "name": "Name",
@@ -147,6 +157,29 @@
         "created": "Created",
         "scopes": "Permissions",
         "action": "Action"
+      },
+      "role-create": {
+        "label-scope": "Scope",
+        "label-allowances": "Allowances",
+        "placeholder-scope": "Pick a scope"
+      },
+      "permissions": {
+        "app": {
+          "CreateBucket": "Create Bucket",
+          "DeleteBucket": "Delete Bucket",
+          "ListAllTokens": "List All Tokens",
+          "DeleteAllTokens": "Delete All Tokens",
+          "ManageRoles": "Manage Roles"
+        },
+        "user": {
+          "Read": "Read",
+          "Write": "Write",
+          "Overwrite": "Overwrite",
+          "ListDirectory": "List Directory",
+          "ListBucket": "List Bucket",
+          "Rename": "Rename",
+          "Delete": "Delete"
+        }
       }
     }
   },

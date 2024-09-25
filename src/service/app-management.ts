@@ -2,6 +2,7 @@ import type {AppDto, CreateAppRequest, DeleteApplicationRequest, OwnAppDto} from
 import axios from "axios";
 import {dashboardAddress} from "@/service/api-access";
 import type {BucketDto} from "@/dto/bucket";
+import type {MembersDTO, UserDTO} from "@/dto/user";
 
 export async function createApp(req: CreateAppRequest): Promise<AppDto> {
     return (await axios.post(dashboardAddress('/api/app/create'), req)).data
