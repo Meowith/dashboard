@@ -65,15 +65,23 @@ async function performRegister() {
   let req: RegisterRequest = {
     password: password.value, username: username.value,
   }
-  if (props.setup) {
-    try {
+
+  try {
+    if (props.setup) {
       await setupRegisterRequest(req)
-    } catch (error) {
-      errorMessage.value = t('setup.fail') + error
+
+      await router.push({path: '/login'})
+    } else {
+      let response = await registerRequest(req)
+
+      preferences.preferences.token = response.token;
+
+      await router.push({path: '/'})
     }
+  } catch (error) {
+    errorMessage.value = t('setup.fail') + error
   }
   loading.value = false;
-  await router.push({path: '/login'})
 }
 
 watch(username, () => errorMessage.value = '')

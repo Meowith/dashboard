@@ -1,6 +1,7 @@
 import type {AppDto, MemberDto, OwnAppDto} from "@/dto/app";
 import type {BucketDto} from "@/dto/bucket";
 import type {ScopedPermission, UserRoleDTO} from "@/dto/role";
+import type {TokenDto} from "@/dto/token";
 
 export interface App {
     id: string,
@@ -67,4 +68,17 @@ export interface UserRole {
     scopes: ScopedPermission[],
     created: Date,
     last_modified: Date,
+}
+
+export const appTokenFrom = ({created, last_modified, ...rest}: TokenDto): AppToken => ({
+    ...rest,
+    created: new Date(created),
+    last_modified: new Date(last_modified)
+});
+
+export interface AppToken {
+    created: Date,
+    last_modified: Date,
+    issuer_id: string,
+    name: string,
 }

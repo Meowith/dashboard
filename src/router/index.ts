@@ -7,7 +7,7 @@ import AdminView from "@/views/AdminView.vue";
 import NodeView from "@/components/admin/NodeView.vue";
 import {usePreferenceStore} from "@/stores/preferences";
 import AppManager from "@/components/apps/AppManager.vue";
-import UserManagement from "@/components/users/UserManagement.vue";
+import UserManagement from "@/components/users/MemberManagement.vue";
 import TokenManagement from "@/components/tokens/TokenManagement.vue";
 import RoleManagement from "@/components/roles/RoleManagement.vue";
 

@@ -18,6 +18,10 @@ export async function deleteApp(req: DeleteApplicationRequest): Promise<void> {
     })
 }
 
+export async function listAppMembers(id: string): Promise<MembersDTO> {
+    return (await axios.get(dashboardAddress(`/api/app/${id}/members`))).data;
+}
+
 export async function listBuckets(app_id: string): Promise<{ buckets: BucketDto[] }> {
     return (await axios.get(dashboardAddress('/api/app/buckets/' + app_id))).data
 }

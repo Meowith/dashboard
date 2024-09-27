@@ -25,15 +25,18 @@ const currentApp = ref<App>()
 const {t} = useTranslation()
 const buckets = ref<Bucket[]>([])
 const {setBuckets} = useStateStore()
+const loading = ref(false)
 
 async function fetchBuckets() {
   try {
+    loading.value = true;
     let new_buckets = await listBuckets(currentApp.value!.id)
     buckets.value = []
     new_buckets.buckets.forEach(bucket => {
       buckets.value.push(bucketFrom(bucket))
     })
     setBuckets(buckets.value)
+    loading.value = false;
   } catch (e) {
   }
 }
@@ -66,9 +69,13 @@ onUnmounted(() => {
     <Message severity="error">{{ t('app.404') }}</Message>
     <Button icon="pi pi-home" @click="router.push({path:'/'})"></Button>
   </div>
-  <div v-else class="flex flex-wrap gap-4">
+  <div v-else-if="!loading" class="flex flex-wrap gap-4">
     <BucketTile v-for="bucket in buckets" :key="bucket.id" :bucket="bucket" class="flex-grow"
                 @refresh="fetchBuckets()"/>
+    <div style="align-items: center" class="flex w-full flex-col" v-if="buckets.length == 0">
+      <span class="pi pi-warehouse text-gray-400" style="font-size: 5rem"></span>
+      <span class="text-thin text-gray-400 m-3">{{t('app.bucket.empty')}}</span>
+    </div>
   </div>
 </template>
 

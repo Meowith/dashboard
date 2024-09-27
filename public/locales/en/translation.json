@@ -8,7 +8,8 @@
   "admin": {
     "403": "Forbidden",
     "codes": {
-      "title": "Register codes"
+      "title": "Register codes",
+      "invalid": "This code is invalid"
     },
     "nodes": {
       "storage": "Storage services",
@@ -20,7 +21,6 @@
       "add": "Add a new node",
       "add-generate": "Create a new register code.",
       "add-tip": "Register your new node with the provided code.",
-      "code-copied": "Copied to your clipboard.",
       "code-gen-fail": "Code generation",
       "code-gen-fail-desc": "Could not issue the register code"
     },
@@ -111,6 +111,7 @@
       }
     },
     "bucket": {
+      "empty": "There are no buckets in this app",
       "tile": {
         "created": "Created",
         "storage-used": "Used:",
@@ -139,10 +140,42 @@
       "create": {
         "header": "Add a new member",
         "name": "Member username"
+      },
+      "edit": {
+        "title": "Edit roles",
+        "roles": "Roles"
+      },
+      "prompt": {
+        "delete-sure": "Are you sure you want to delete this member?",
+        "delete": "Delete member"
+      }
+    },
+    "tokens": {
+      "create": {
+        "header": "Create a new token",
+        "name": "Token name",
+        "ready-message": "Your token is ready",
+        "ready-tip": "Save the token now as it will not be accessible later."
+      },
+      "table": {
+        "title-all": "Application tokens",
+        "title-your": "Your application tokens"
+      },
+      "table-cols": {
+        "name": "Name",
+        "created": "Created",
+        "last_modified": "Modified",
+        "issuer": "Issuer",
+        "action": "Action"
+      },
+      "prompt": {
+        "delete-sure": "Are you sure you want to delete this token?",
+        "delete": "Delete token"
       }
     },
     "roles": {
       "title": "Roles",
+      "empty": "There are no roles in this app",
       "create": {
         "name": "Role name",
         "header": "Create a new role"
@@ -186,5 +219,9 @@
   "confirm": {
     "delete": "Delete",
     "cancel": "Cancel"
+  },
+  "copy": {
+    "title": "Copied to clipboard",
+    "desc": "The text is ready in your clipboard"
   }
 }

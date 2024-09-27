@@ -52,7 +52,9 @@ export async function controllerBasicLogin(req: BasicLoginRequest): Promise<Auth
 }
 
 export async function dashboardBasicLogin(req: BasicLoginRequest): Promise<AuthResponse> {
-    return (await axios.post(dashboardAddress("/api/public/login/BASIC"), {}, {
+    return (await axios.post(dashboardAddress("/api/auth/login"), {
+        method: 'BASIC'
+    }, {
         headers: {
             "username": req.username,
             "password": req.password

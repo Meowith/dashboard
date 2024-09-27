@@ -174,11 +174,11 @@ const dashboardsAlive = computed(() => {
             <div :class="['flex items-center p-2 gap-2', { 'bg-surface-100 dark:bg-surface-800': options.odd }]"
                  style="height: 50px">
               <div class="flex flex-col gap-1">
-                <span class="font-mono text-sm">{{ item.code }}</span>
+                <span :class="'font-mono text-xs ' + (item.valid ? 'text-green-400' : 'text-red-400')">{{ item.code }}</span>
                 <span class="font-thin text-xs">{{ new Date(item.created).toLocaleString() }}</span>
               </div>
-              <i v-if="item.valid" class="pi pi-check"></i>
-              <i v-else class="pi pi-times"></i>
+              <i v-if="item.valid" class="pi pi-check text-green-400"></i>
+              <i v-tooltip="t('admin.codes.invalid')" v-else class="pi pi-times text-red-400"></i>
               <div class="flex-grow flex justify-end">
                 <Button class="justify-self-end" icon="pi pi-trash" outlined severity="danger"
                         @click="deleteCode(item.code)"></Button>

@@ -33,6 +33,7 @@ async function doCreateMember() {
         severity: 'error',
         life: 3000
       })
+      memberLoading.value = false
       return;
     }
     await addAppMember(props.currentApp!.id, user.id)

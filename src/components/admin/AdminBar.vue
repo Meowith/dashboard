@@ -36,7 +36,8 @@ function doCopy() {
   if (copy(registerCode.value)) {
     toast.add({
       severity: 'info',
-      summary: t('admin.nodes.code-copied'),
+      summary: t('copy.title'),
+      detail: t('copy.desc'),
       life: 3000
     })
   }

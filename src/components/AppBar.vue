@@ -11,6 +11,7 @@ import BarAppManagement from "@/components/appbar/BarAppManagement.vue";
 import CreateBucket from "@/components/appbar/CreateBucket.vue";
 import CreateRole from "@/components/appbar/CreateRole.vue";
 import CreateMember from "@/components/appbar/CreateMember.vue";
+import CreateToken from "@/components/appbar/CreateToken.vue";
 
 const {t} = useTranslation()
 const {globalUser} = useStateStore();
@@ -47,7 +48,7 @@ function calcNav() {
     menuOptions.value.push({
       label: t('home.nav.tokens'),
       icon: 'pi pi-list',
-      route: `/apps/${currentApp.value!.id}/users`
+      route: `/apps/${currentApp.value!.id}/tokens`
     });
   }
 
@@ -83,9 +84,10 @@ watch(currentApp, () => {
   <Menubar :model="menuOptions">
     <template #start>
       <CreateApp v-if="route.name == 'appList'" @refresh="emit('refresh')"/>
-      <CreateBucket v-if="route.name == 'appMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
-      <CreateRole v-if="route.name == 'appRoleMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
-      <CreateMember v-if="route.name == 'appUserMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
+      <CreateBucket v-else-if="route.name == 'appMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
+      <CreateRole v-else-if="route.name == 'appRoleMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
+      <CreateMember v-else-if="route.name == 'appUserMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
+      <CreateToken v-else-if="route.name == 'appTokenMgmt'" :currentApp="currentApp" @refresh="emit('refresh')"/>
     </template>
     <template #item="{ item, props, }">
       <router-link v-slot="{ href, navigate }" :to="item.route" custom>
