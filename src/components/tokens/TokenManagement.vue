@@ -3,37 +3,31 @@
 import {storeToRefs} from "pinia";
 import {useStateStore} from "@/stores/state";
 import {computed, onMounted, ref, watch} from "vue";
-import {type App, type AppToken, appTokenFrom, fromOwnedApps} from "@/models/entity";
+import {type AppToken, appTokenFrom} from "@/models/entity";
 import {useRoute} from "vue-router";
-import {listOwnedApps} from "@/service/app-management";
 import {deleteToken, listTokens} from "@/service/token-management";
 import {errorToast} from "@/service/error";
 import {useToast} from "primevue/usetoast";
 import {useTranslation} from "i18next-vue";
 import {useConfirm} from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import {hasPermission} from "@/service/api-access";
+import {AppPermission} from "@/dto/role";
 
-const {ownApps} = storeToRefs(useStateStore())
-const currentApp = ref<App>()
-const route = useRoute()
-const {setApps, globalUser} = useStateStore()
+const {currentApp} = storeToRefs(useStateStore())
+useRoute();
+const {globalUser} = useStateStore()
 const {t} = useTranslation();
 
 const props = defineProps<{
   refresh: boolean
 }>()
-const emit = defineEmits(['refresh'])
+
 const tokens = ref<AppToken[]>([])
 const toast = useToast()
 const confirm = useConfirm()
-
-async function fetchApps() {
-  setApps(fromOwnedApps(await listOwnedApps()))
-}
-
 const canSeeAll = computed(() => {
-  // TODO proper perm check
-  return globalUser?.id == currentApp.value?.owner_id
+  return globalUser?.id == currentApp.value?.owner_id || hasPermission([AppPermission.ListAllTokens])
 })
 
 async function fetchTokens() {
@@ -51,13 +45,6 @@ async function fetchTokens() {
 }
 
 onMounted(async () => {
-  let id = route.params['id']
-  let app: App | undefined = ownApps.value?.apps.find(x => x.id == id)
-  if (!app) {
-    await fetchApps()
-    app = ownApps.value?.apps.find(x => x.id == id)
-  }
-  currentApp.value = app
   await fetchTokens()
 })
 
@@ -83,11 +70,12 @@ function promptDelete(token: AppToken) {
       try {
         await deleteToken(currentApp.value!.id, token.issuer_id, token.name)
         await fetchTokens()
-      } catch(e) {
+      } catch (e) {
         errorToast(toast, e)
       }
     },
-    reject: () => {}
+    reject: () => {
+    }
   })
 }
 
@@ -96,7 +84,7 @@ function promptDelete(token: AppToken) {
 <template>
   <Panel :header="t(`app.tokens.table.${canSeeAll ? 'title-all' : 'title-your'}`)">
     <ConfirmDialog></ConfirmDialog>
-    <DataTable :value="tokens">
+    <DataTable :value="tokens" v-if="tokens.length">
       <Column :header="t('app.roles.table-cols.name')" field="name"/>
       <Column :header="t('app.roles.table-cols.created')" field="created">
         <template #body="slotProps">
@@ -115,6 +103,10 @@ function promptDelete(token: AppToken) {
         </template>
       </Column>
     </DataTable>
+    <div style="align-items: center" class="flex w-full flex-col" v-else>
+      <span class="pi pi-list text-gray-400" style="font-size: 5rem"></span>
+      <span class="text-thin text-gray-400 m-3">{{ t('app.tokens.empty') }}</span>
+    </div>
   </Panel>
 </template>
 

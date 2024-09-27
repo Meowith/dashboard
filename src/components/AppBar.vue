@@ -12,6 +12,8 @@ import CreateBucket from "@/components/appbar/CreateBucket.vue";
 import CreateRole from "@/components/appbar/CreateRole.vue";
 import CreateMember from "@/components/appbar/CreateMember.vue";
 import CreateToken from "@/components/appbar/CreateToken.vue";
+import {hasPermission} from "@/service/api-access";
+import {AppPermission} from "@/dto/role";
 
 const {t} = useTranslation()
 const {globalUser} = useStateStore();
@@ -35,16 +37,18 @@ function calcNav() {
       icon: 'pi pi-warehouse',
       route: `/apps/${currentApp.value!.id}`
     });
-    menuOptions.value.push({
-      label: t('home.nav.roles'),
-      icon: 'pi pi-user-edit',
-      route: `/apps/${currentApp.value!.id}/roles`
-    });
-    menuOptions.value.push({
-      label: t('home.nav.users'),
-      icon: 'pi pi-users',
-      route: `/apps/${currentApp.value!.id}/users`
-    });
+    if (hasPermission([AppPermission.ManageRoles]))
+      menuOptions.value.push({
+        label: t('home.nav.roles'),
+        icon: 'pi pi-user-edit',
+        route: `/apps/${currentApp.value!.id}/roles`
+      });
+    if (hasPermission([AppPermission.ManageRoles]))
+      menuOptions.value.push({
+        label: t('home.nav.users'),
+        icon: 'pi pi-users',
+        route: `/apps/${currentApp.value!.id}/users`
+      });
     menuOptions.value.push({
       label: t('home.nav.tokens'),
       icon: 'pi pi-list',

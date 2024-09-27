@@ -12,11 +12,23 @@ export async function fetchCurrentUser(router: Router) {
     await currentUser(dashboardAddress('/api/public/user/me'), router)
 }
 
+const memberIdCache = new Map<string, Promise<UserDTO | undefined>>()
+
 export async function fetchUserByName(name: string): Promise<UserDTO | undefined> {
     return (await axios.get(dashboardAddress(`/api/public/user/lookup/name/${name}`))).data.user;
 }
 
 export async function fetchUserById(id: string): Promise<UserDTO | undefined> {
+    if (memberIdCache.has(id)) {
+        return await memberIdCache.get(id);
+    }
+
+    const p = doFetchUserById(id)
+    memberIdCache.set(id, p);
+    return p
+}
+
+async function doFetchUserById(id: string): Promise<UserDTO | undefined> {
     return (await axios.get(dashboardAddress(`/api/public/user/lookup/id/${id}`))).data.user;
 }
 

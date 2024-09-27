@@ -142,8 +142,14 @@
         "name": "Member username"
       },
       "edit": {
-        "title": "Edit roles",
+        "title": "Manage members",
+        "empty": "There are no members in this app",
         "roles": "Roles"
+      },
+      "columns": {
+        "name": "Name",
+        "roles": "Roles",
+        "actions": "Actions"
       },
       "prompt": {
         "delete-sure": "Are you sure you want to delete this member?",
@@ -171,7 +177,8 @@
       "prompt": {
         "delete-sure": "Are you sure you want to delete this token?",
         "delete": "Delete token"
-      }
+      },
+      "empty": "There are no tokens in this app"
     },
     "roles": {
       "title": "Roles",

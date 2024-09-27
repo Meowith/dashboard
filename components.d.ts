@@ -20,6 +20,7 @@ declare module 'vue' {
     Card: typeof import('primevue/card')['default']
     CatIDLoginForm: typeof import('./src/components/CatIDLoginForm.vue')['default']
     Chip: typeof import('primevue/chip')['default']
+    Chips: typeof import('primevue/chips')['default']
     Column: typeof import('primevue/column')['default']
     CreateApp: typeof import('./src/components/appbar/CreateApp.vue')['default']
     CreateBucket: typeof import('./src/components/appbar/CreateBucket.vue')['default']

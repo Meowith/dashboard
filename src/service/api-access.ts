@@ -3,6 +3,9 @@ import {usePreferenceStore} from "@/stores/preferences";
 import type {Reactive} from "vue";
 import {type NodeMap, useNodesStore} from "@/stores/nodes";
 import {useStateStore} from "@/stores/state";
+import {APP_ID, AppPermission} from "@/dto/role";
+import app from "@/App.vue";
+import {decodePermSet} from "@/service/role-management";
 
 let nodes: Reactive<NodeMap>;
 
@@ -60,4 +63,24 @@ export async function dashboardBasicLogin(req: BasicLoginRequest): Promise<AuthR
             "password": req.password
         }
     })).data;
+}
+
+export function hasPermission(req: AppPermission[]): boolean {
+    let state = useStateStore()
+    if (!state.ownApps || !state.globalUser || !state.currentApp || !state.currentRoles) return false
+    if (state.currentApp.owner_id == state.globalUser!.id) return true
+    let member = state.ownApps.members.find(x => x.app_id == state.currentApp!.id)
+    if (!member) return false
+    let check = new Set(req)
+    for (let roleName of member.member_roles) {
+        let role = state.currentRoles.find(x => x.name == roleName)
+        if (!role) continue
+        for (let scope of role.scopes.filter(x => x.bucket_id == APP_ID)) {
+            decodePermSet(AppPermission, scope.allowance).forEach((permission) => {
+                check.delete(permission as unknown as AppPermission)
+            })
+            if (check.size == 0) return true
+        }
+    }
+    return false
 }

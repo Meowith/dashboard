@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import {onMounted, ref, watch} from "vue";
-import {type App, fromOwnedApps, type UserRole, userRoleFrom} from "@/models/entity";
-import {useRoute} from "vue-router";
+import {ref, watch} from "vue";
+import {type UserRole, userRoleFrom} from "@/models/entity";
 import {storeToRefs} from "pinia";
 import {useStateStore} from "@/stores/state";
 import {useTranslation} from "i18next-vue";
-import {listOwnedApps} from "@/service/app-management";
 import {deleteRole, getRoles, modifyRole} from "@/service/role-management";
 import {useToast} from "primevue/usetoast";
 import {errorToast} from "@/service/error";
@@ -13,41 +11,22 @@ import ScopeEditor from "@/components/ScopeEditor.vue";
 
 const {t} = useTranslation()
 
-const {ownApps} = storeToRefs(useStateStore())
-const currentApp = ref<App>()
-const route = useRoute()
-const {setApps} = useStateStore()
+const {currentApp} = storeToRefs(useStateStore())
 const permEdit = ref<UserRole | undefined>()
 const props = defineProps<{
   refresh: boolean
 }>()
 const toast = useToast()
 
-async function fetchApps() {
-  setApps(fromOwnedApps(await listOwnedApps()))
-}
 
 watch(() => props.refresh, () => {
   fetchRoles()
 })
 
-onMounted(async () => {
-  let id = route.params['id']
-  let app: App | undefined = ownApps.value?.apps.find(x => x.id == id)
-  loading.value = true
-  if (!app) {
-    await fetchApps()
-    app = ownApps.value?.apps.find(x => x.id == id)
-  }
-  currentApp.value = app
-  await fetchRoles()
-  loading.value = false
-})
-
-const roles = ref<UserRole[]>([])
+const {currentRoles} = storeToRefs(useStateStore())
 
 async function fetchRoles() {
-  roles.value = (await getRoles(currentApp.value!.id)).roles.map(userRoleFrom)
+  currentRoles.value = (await getRoles(currentApp.value!.id)).roles.map(userRoleFrom)
 }
 
 async function doDeleteRole(name: string) {
@@ -87,7 +66,7 @@ const loading = ref(false)
 const scopeEditor = ref(false)
 
 function editRole(name: string) {
-  permEdit.value = roles.value.find(x => x.name == name)
+  permEdit.value = currentRoles.value.find(x => x.name == name)
   if (!permEdit.value) return
   scopeEditor.value = true
 }
@@ -102,11 +81,11 @@ function editRole(name: string) {
                      :save-loading="saveLoading" v-model:scopes="permEdit.scopes"
                      @save="save"/>
       </Dialog>
-      <div style="align-items: center" class="flex w-full flex-col" v-if="roles.length == 0 && !loading">
+      <div style="align-items: center" class="flex w-full flex-col" v-if="currentRoles.length == 0 && !loading">
         <span class="pi pi-user-edit text-gray-400" style="font-size: 5rem"></span>
         <span class="text-thin text-gray-400 m-3">{{ t('app.roles.empty') }}</span>
       </div>
-      <DataTable :value="roles" v-else>
+      <DataTable :value="currentRoles" v-else>
         <Column :header="t('app.roles.table-cols.name')" field="name"/>
         <Column :header="t('app.roles.table-cols.created')" field="created">
           <template #body="slotProps">

@@ -10,7 +10,8 @@ export interface AppDto {
 export interface MemberDto {
     app_id: string,
     member_id: string,
-    member_roles: string[]
+    member_roles: string[],
+    name?: string,
 }
 
 export interface MemberedApp {

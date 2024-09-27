@@ -2,29 +2,21 @@
 import {storeToRefs} from "pinia";
 import {useStateStore} from "@/stores/state";
 import {computed, onMounted, ref, watch} from "vue";
-import {type App, fromOwnedApps, type UserRole, userRoleFrom} from "@/models/entity";
-import {useRoute} from "vue-router";
-import {listAppMembers, listOwnedApps} from "@/service/app-management";
+import {listAppMembers} from "@/service/app-management";
 import type {MemberDto} from "@/dto/app";
 import {useTranslation} from "i18next-vue";
-import {getRoles, modifyUserRoles} from "@/service/role-management";
+import {modifyUserRoles} from "@/service/role-management";
 import {useConfirm} from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import {deleteAppMember} from "@/service/user-management";
 import {errorToast} from "@/service/error";
 import {useToast} from "primevue/usetoast";
+import {fetchUserById} from "@/service/user";
 
 const {t} = useTranslation()
-const {ownApps} = storeToRefs(useStateStore())
-const currentApp = ref<App>()
-const route = useRoute()
+const {currentApp} = storeToRefs(useStateStore())
 const confirm = useConfirm()
 const toast = useToast()
-const {setApps} = useStateStore()
-
-async function fetchApps() {
-  setApps(fromOwnedApps(await listOwnedApps()))
-}
 
 const props = defineProps<{
   refresh: boolean
@@ -35,37 +27,30 @@ watch(() => props.refresh, () => {
 })
 
 onMounted(async () => {
-  let id = route.params['id']
-  let app: App | undefined = ownApps.value?.apps.find(x => x.id == id)
-  if (!app) {
-    await fetchApps()
-    app = ownApps.value?.apps.find(x => x.id == id)
-  }
-  currentApp.value = app
-  await fetchRoles()
   await fetchMembers()
 })
 
 const members = ref<MemberDto[]>([])
 
 async function fetchMembers() {
-  members.value = (await listAppMembers(currentApp.value!.id)).members
+  let new_members = (await listAppMembers(currentApp.value!.id)).members
+  members.value = []
+  for (let member of new_members) {
+    member.name = (await fetchUserById(member.member_id))?.name
+    members.value.push(member)
+  }
 }
 
 const userEditOpen = ref(false)
 const userEdit = ref<MemberDto | undefined>(undefined)
 const pickListRoles = ref<[string[], string[]]>([[], []])
-const roles = ref<UserRole[]>([])
+const {currentRoles} = storeToRefs(useStateStore())
 const modified = computed(() => {
   if (!userEdit.value) return false
   return !(userEdit.value.member_roles.length == pickListRoles.value[1].length &&
       userEdit.value.member_roles.every(x => pickListRoles.value[1].includes(x)))
 })
 const saveLoading = ref(false)
-
-async function fetchRoles() {
-  roles.value = (await getRoles(currentApp.value!.id)).roles.map(userRoleFrom)
-}
 
 async function doDeleteMember(member: MemberDto) {
   confirm.require({
@@ -107,7 +92,7 @@ async function save() {
 }
 
 function editUser(member: MemberDto) {
-  pickListRoles.value = [roles.value
+  pickListRoles.value = [currentRoles.value
       .map((role) => role.name)
       .filter(role => !member.member_roles.includes(role)), member.member_roles]
   userEditOpen.value = true
@@ -134,10 +119,20 @@ function editUser(member: MemberDto) {
           </div>
         </div>
       </Dialog>
-      <DataTable :value="members" tableStyle="min-width: 50rem">
-        <Column field="member_id" header="ID"></Column>
-        <Column field="member_roles" header="Roles"></Column>
-        <Column field="actions" header="Actions">
+      <DataTable :value="members" tableStyle="min-width: 50rem" v-if="members.length">
+        <Column field="member_id" :header="t('app.members.columns.name')">
+          <template #body="slotProps">
+            {{slotProps.data.name || slotProps.data.member_id}}
+          </template>
+        </Column>
+        <Column field="member_roles" :header="t('app.members.columns.roles')">
+          <template #body="slotProps">
+            <div class="flex gap-2 flex-wrap">
+              <Chip v-for="role in slotProps.data.member_roles" :key="role" :label="role"/>
+            </div>
+          </template>
+        </Column>
+        <Column field="actions" :header="t('app.members.columns.actions')">
           <template #body="slotProps">
             <Button class="mr-2" icon="pi pi-user-edit" severity="info"
                     @click="editUser(slotProps.data)"></Button>
@@ -145,6 +140,10 @@ function editUser(member: MemberDto) {
           </template>
         </Column>
       </DataTable>
+      <div style="align-items: center" class="flex w-full flex-col" v-else>
+        <span class="pi pi-users text-gray-400" style="font-size: 5rem"></span>
+        <span class="text-thin text-gray-400 m-3">{{ t('app.members.edit.empty') }}</span>
+      </div>
     </Panel>
   </div>
 </template>

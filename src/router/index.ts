@@ -10,6 +10,11 @@ import AppManager from "@/components/apps/AppManager.vue";
 import UserManagement from "@/components/users/MemberManagement.vue";
 import TokenManagement from "@/components/tokens/TokenManagement.vue";
 import RoleManagement from "@/components/roles/RoleManagement.vue";
+import {type App, fromOwnedApps, userRoleFrom} from "@/models/entity";
+import {useStateStore} from "@/stores/state";
+import {listOwnedApps} from "@/service/app-management";
+import NotFoundView from "@/views/NotFoundView.vue";
+import {getRoles} from "@/service/role-management";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +72,11 @@ const router = createRouter({
             path: '/setup',
             name: 'setup',
             component: SetupView
+        },
+        {
+            path: '/404',
+            name: '404',
+            component: NotFoundView
         }
     ]
 })
@@ -76,6 +86,26 @@ router.beforeEach(async (to, from, next: NavigationGuardNext) => {
     if (!preferences.token && to.redirectedFrom == undefined && to.name != "login") {
         return next("/login")
     }
+
+    try {
+        if (['appMgmt', 'appUserMgmt', 'appRoleMgmt', 'appTokenMgmt'].includes(to.name as string)) {
+            const state = useStateStore()
+            let id = to.params['id']
+            let app: App | undefined = state.ownApps?.apps.find(x => x.id == id)
+            if (!app) {
+                state.setApps(fromOwnedApps(await listOwnedApps()))
+                app = state.ownApps?.apps.find(x => x.id == id)
+            }
+            if (!app) return next("/404")
+            if (state.currentApp?.id != app.id) {
+                state.setCurrentApp(app)
+                state.setCurrentRoles((await getRoles(app.id)).roles.map(userRoleFrom))
+            }
+        }
+    } catch(e) {
+        return next("/404")
+    }
+
     next();
 })
 
