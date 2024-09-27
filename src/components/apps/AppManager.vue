@@ -45,6 +45,9 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div class="flex w-full" v-if="loading">
+    <ProgressSpinner/>
+  </div>
   <div v-if="!loading" class="flex flex-wrap gap-4">
     <BucketTile v-for="bucket in buckets" :key="bucket.id" :bucket="bucket" class="flex-grow"
                 @refresh="fetchBuckets()"/>

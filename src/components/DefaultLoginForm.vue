@@ -44,7 +44,7 @@ async function performLogin() {
     await router.push({path: '/'})
   } catch (e) {
     if (isAxiosError(e)) {
-      if (!e.response && !e.request) {
+      if (!e.response) {
         try {
           let response = await controllerBasicLogin(req);
           preferences.preferences.token = response.token;

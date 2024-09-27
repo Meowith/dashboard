@@ -34,7 +34,9 @@
       }
     },
     "nav": {
-      "home": "Home"
+      "home": "Home",
+      "admins": "Admins",
+      "general": "General"
     }
   },
   "error": {

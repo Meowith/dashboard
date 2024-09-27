@@ -48,6 +48,16 @@ const menuItems: MenuItem[] = [
     label: t('admin.nav.home'),
     icon: "pi pi-home",
     route: '/'
+  },
+  {
+    label: t('admin.nav.general'),
+    icon: "pi pi-cog",
+    route: '/admin'
+  },
+  {
+    label: t('admin.nav.admins'),
+    icon: "pi pi-users",
+    route: '/admin/users'
   }
 ]
 

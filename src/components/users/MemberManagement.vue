@@ -17,6 +17,7 @@ const {t} = useTranslation()
 const {currentApp} = storeToRefs(useStateStore())
 const confirm = useConfirm()
 const toast = useToast()
+const loading = ref(false)
 
 const props = defineProps<{
   refresh: boolean
@@ -33,12 +34,18 @@ onMounted(async () => {
 const members = ref<MemberDto[]>([])
 
 async function fetchMembers() {
-  let new_members = (await listAppMembers(currentApp.value!.id)).members
-  members.value = []
-  for (let member of new_members) {
-    member.name = (await fetchUserById(member.member_id))?.name
-    members.value.push(member)
+  loading.value = true
+  try {
+    let new_members = (await listAppMembers(currentApp.value!.id)).members
+    members.value = []
+    for (let member of new_members) {
+      member.name = (await fetchUserById(member.member_id))?.name
+      members.value.push(member)
+    }
+  } catch (e) {
+    errorToast(toast, e)
   }
+  loading.value = false
 }
 
 const userEditOpen = ref(false)
@@ -101,7 +108,10 @@ function editUser(member: MemberDto) {
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-4">
+  <div class="flex w-full" v-if="loading">
+    <ProgressSpinner/>
+  </div>
+  <div v-if="!loading" class="flex flex-wrap gap-4">
     <Panel :header="t('app.members.edit.title')" class="w-full">
       <ConfirmDialog></ConfirmDialog>
       <Dialog v-model:visible="userEditOpen" :header="userEdit?.member_id" modal class="w-1/2 min-w-96">

@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AdminBar: typeof import('./src/components/admin/AdminBar.vue')['default']
+    AdminUserView: typeof import('./src/components/admin/AdminUserView.vue')['default']
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     AppManager: typeof import('./src/components/apps/AppManager.vue')['default']
     AppsHome: typeof import('./src/components/apps/AppsHome.vue')['default']

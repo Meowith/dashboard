@@ -74,7 +74,10 @@ function editRole(name: string) {
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-4">
+  <div class="flex w-full" v-if="loading">
+    <ProgressSpinner/>
+  </div>
+  <div v-if="!loading" class="flex flex-wrap gap-4">
     <Panel :header="t('app.roles.title')" class="w-full">
       <Dialog v-if="currentApp && permEdit" v-model:visible="scopeEditor" :header="permEdit.name" modal class="w-1/2 min-w-96">
         <ScopeEditor  :app="currentApp" allow-app-scope

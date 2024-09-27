@@ -15,6 +15,7 @@ import {useStateStore} from "@/stores/state";
 import {listOwnedApps} from "@/service/app-management";
 import NotFoundView from "@/views/NotFoundView.vue";
 import {getRoles} from "@/service/role-management";
+import AdminUserView from "@/components/admin/AdminUserView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +61,11 @@ const router = createRouter({
                     path: '',
                     name: 'nodeView',
                     component: NodeView,
+                },
+                {
+                    path: "users",
+                    name: "admUserMgmt",
+                    component: AdminUserView
                 }
             ]
         },
@@ -83,7 +89,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next: NavigationGuardNext) => {
     let {preferences} = usePreferenceStore()
-    if (!preferences.token && to.redirectedFrom == undefined && to.name != "login") {
+    if (!preferences.token && to.redirectedFrom == undefined && to.name != "login" && to.name != "setup") {
         return next("/login")
     }
 

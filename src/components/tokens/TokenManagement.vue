@@ -13,6 +13,7 @@ import {useConfirm} from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import {hasPermission} from "@/service/api-access";
 import {AppPermission} from "@/dto/role";
+import {fetchUserById} from "@/service/user";
 
 const {currentApp} = storeToRefs(useStateStore())
 useRoute();
@@ -24,6 +25,7 @@ const props = defineProps<{
 }>()
 
 const tokens = ref<AppToken[]>([])
+const loading = ref(false)
 const toast = useToast()
 const confirm = useConfirm()
 const canSeeAll = computed(() => {
@@ -33,15 +35,20 @@ const canSeeAll = computed(() => {
 async function fetchTokens() {
   if (!currentApp.value || !globalUser) return
 
+  loading.value = true
   try {
     if (canSeeAll) {
       tokens.value = (await listTokens(currentApp.value!.id, '')).tokens.map(appTokenFrom)
     } else {
       tokens.value = (await listTokens(currentApp.value!.id, globalUser!.id)).tokens.map(appTokenFrom)
     }
+    for (let i = 0; i < tokens.value.length; i++) {
+      tokens.value[i].user_name = (await fetchUserById(tokens.value[i].issuer_id))?.name
+    }
   } catch (e) {
     errorToast(toast, e)
   }
+  loading.value = false
 }
 
 onMounted(async () => {
@@ -82,32 +89,41 @@ function promptDelete(token: AppToken) {
 </script>
 
 <template>
-  <Panel :header="t(`app.tokens.table.${canSeeAll ? 'title-all' : 'title-your'}`)">
-    <ConfirmDialog></ConfirmDialog>
-    <DataTable :value="tokens" v-if="tokens.length">
-      <Column :header="t('app.roles.table-cols.name')" field="name"/>
-      <Column :header="t('app.roles.table-cols.created')" field="created">
-        <template #body="slotProps">
-          {{ slotProps.data.created.toLocaleString() }}
-        </template>
-      </Column>
-      <Column :header="t('app.roles.table-cols.last-modified')" field="last_modified">
-        <template #body="slotProps">
-          {{ slotProps.data.created.toLocaleString() }}
-        </template>
-      </Column>
-      <Column :header="t('app.roles.table-cols.name')" field="issuer_id" v-if="canSeeAll"/>
-      <Column :header="t('app.roles.table-cols.action')" field="actions">
-        <template #body="slotProps">
-          <Button outlined icon="pi pi-trash" severity="danger" @click="promptDelete(slotProps.data)"></Button>
-        </template>
-      </Column>
-    </DataTable>
-    <div style="align-items: center" class="flex w-full flex-col" v-else>
-      <span class="pi pi-list text-gray-400" style="font-size: 5rem"></span>
-      <span class="text-thin text-gray-400 m-3">{{ t('app.tokens.empty') }}</span>
-    </div>
-  </Panel>
+  <div class="flex w-full" v-if="loading">
+    <ProgressSpinner/>
+  </div>
+  <div v-if="!loading">
+    <Panel :header="t(`app.tokens.table.${canSeeAll ? 'title-all' : 'title-your'}`)">
+      <ConfirmDialog></ConfirmDialog>
+      <DataTable :value="tokens" v-if="tokens.length">
+        <Column :header="t('app.tokens.table-cols.name')" field="name"/>
+        <Column :header="t('app.tokens.table-cols.created')" field="created">
+          <template #body="slotProps">
+            {{ slotProps.data.created.toLocaleString() }}
+          </template>
+        </Column>
+        <Column :header="t('app.tokens.table-cols.last_modified')" field="last_modified">
+          <template #body="slotProps">
+            {{ slotProps.data.created.toLocaleString() }}
+          </template>
+        </Column>
+        <Column :header="t('app.tokens.table-cols.issuer')" field="issuer_id" v-if="canSeeAll">
+          <template #body="slotProps">
+            {{ slotProps.data.user_name || slotProps.data.issuer_id }}
+          </template>
+        </Column>
+        <Column :header="t('app.tokens.table-cols.action')" field="actions">
+          <template #body="slotProps">
+            <Button outlined icon="pi pi-trash" severity="danger" @click="promptDelete(slotProps.data)"></Button>
+          </template>
+        </Column>
+      </DataTable>
+      <div style="align-items: center" class="flex w-full flex-col" v-else>
+        <span class="pi pi-list text-gray-400" style="font-size: 5rem"></span>
+        <span class="text-thin text-gray-400 m-3">{{ t('app.tokens.empty') }}</span>
+      </div>
+    </Panel>
+  </div>
 </template>
 
 <style scoped>

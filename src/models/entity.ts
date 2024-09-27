@@ -81,4 +81,5 @@ export interface AppToken {
     last_modified: Date,
     issuer_id: string,
     name: string,
+    user_name?: string
 }
