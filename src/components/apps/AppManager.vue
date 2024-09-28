@@ -48,10 +48,10 @@ onUnmounted(() => {
   <div class="flex w-full" v-if="loading">
     <ProgressSpinner/>
   </div>
-  <div v-if="!loading" class="flex flex-wrap gap-4">
+  <div v-if="!loading" class="flex flex-wrap gap-4 flex-grow">
     <BucketTile v-for="bucket in buckets" :key="bucket.id" :bucket="bucket" class="flex-grow"
                 @refresh="fetchBuckets()"/>
-    <div style="align-items: center" class="flex w-full flex-col" v-if="buckets.length == 0">
+    <div class="flex w-full flex-col flex-grow justify-center items-center" v-if="buckets.length == 0">
       <span class="pi pi-warehouse text-gray-400" style="font-size: 5rem"></span>
       <span class="text-thin text-gray-400 m-3">{{t('app.bucket.empty')}}</span>
     </div>

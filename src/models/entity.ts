@@ -2,6 +2,8 @@ import type {AppDto, MemberDto, OwnAppDto} from "@/dto/app";
 import type {BucketDto} from "@/dto/bucket";
 import type {ScopedPermission, UserRoleDTO} from "@/dto/role";
 import type {TokenDto} from "@/dto/token";
+import type {UserDTO} from "@/dto/user";
+import type {GlobalUserInfo} from "@/stores/state";
 
 export interface App {
     id: string,
@@ -83,3 +85,10 @@ export interface AppToken {
     name: string,
     user_name?: string
 }
+
+export const fromUserDto = ({created, last_modified, global_role, ...rest}: UserDTO): GlobalUserInfo => ({
+    ...rest,
+    globalRole: global_role,
+    created: new Date(created),
+    lastModified: new Date(last_modified)
+})

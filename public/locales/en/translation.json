@@ -24,6 +24,17 @@
       "code-gen-fail": "Code generation",
       "code-gen-fail-desc": "Could not issue the register code"
     },
+    "users": {
+      "columns": {
+        "name": "Name",
+        "global-role": "Role",
+        "created": "Created",
+        "last-modified": "Last modified"
+      },
+      "role-1": "User",
+      "role-2": "Admin",
+      "search": "Search"
+    },
     "tiles": {
       "registered": "Registered",
       "last-seen": "Last heartbeat date",
@@ -35,7 +46,7 @@
     },
     "nav": {
       "home": "Home",
-      "admins": "Admins",
+      "admins": "Users",
       "general": "General"
     }
   },
@@ -98,7 +109,8 @@
         "modified": "Modified",
         "manage": "Manage"
       }
-    }
+    },
+    "empty": "You have no apps."
   },
   "app": {
     "404": "This app was not found.",

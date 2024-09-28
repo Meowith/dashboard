@@ -1,3 +1,5 @@
+import type {GlobalRole} from "@/stores/state";
+
 export interface DashboardNode {
     addr: string
     id: string
@@ -44,4 +46,8 @@ export interface ServiceRegisterCodeDto {
     code: string,
     created: string,
     valid: boolean
+}
+
+export interface UserUpdateRoleRequest {
+    role: "User" | "Admin"
 }

@@ -103,7 +103,7 @@ watch(currentApp, () => {
     </template>
     <template #end>
       <div class="gap-2 flex flex-row items-center">
-        <BarAppManagement v-if="route.name == 'appMgmt' && currentApp" :current-app="currentApp!"/>
+        <BarAppManagement v-if="['appMgmt', 'appUserMgmt', 'appRoleMgmt', 'appTokenMgmt'].includes(route.name as string) && currentApp" :current-app="currentApp!"/>
         <UserProfile/>
       </div>
     </template>
