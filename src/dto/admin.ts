@@ -1,5 +1,3 @@
-import type {GlobalRole} from "@/stores/state";
-
 export interface DashboardNode {
     addr: string
     id: string
@@ -30,11 +28,18 @@ export interface NodeStatus {
     microservice_type: number,
     id: string,
     address: string,
-    max_space: number | undefined,
-    used_space: number | undefined,
+    info: UpdateStorageNodeProperties | undefined,
     created: string,
     last_beat: string,
     access_token_issued_at: string,
+}
+
+export interface UpdateStorageNodeProperties {
+    max_space: number,
+    used_space: number,
+    reserved: number,
+    commited: number,
+    uncommitted: number,
 }
 
 export enum MicroserviceType {
@@ -50,4 +55,8 @@ export interface ServiceRegisterCodeDto {
 
 export interface UserUpdateRoleRequest {
     role: "User" | "Admin"
+}
+
+export interface UserUpdateQuotaRequest {
+    quota: number
 }

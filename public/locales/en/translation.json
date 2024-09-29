@@ -29,11 +29,13 @@
         "name": "Name",
         "global-role": "Role",
         "created": "Created",
-        "last-modified": "Last modified"
+        "last-modified": "Last modified",
+        "quota": "Quota"
       },
       "role-1": "User",
       "role-2": "Admin",
-      "search": "Search"
+      "search": "Search",
+      "edit-quota": "Edit quota"
     },
     "tiles": {
       "registered": "Registered",
@@ -79,7 +81,8 @@
       "password-confirm": "Confirm your password"
     },
     "catid": {
-      "prompt": "Log in using CatID"
+      "prompt": "Log in using CatID",
+      "loading": "Logging you in using CatID"
     },
     "error": {
       "password-mismatch": "The passwords must match",
@@ -101,7 +104,8 @@
     "app": {
       "create": {
         "header": "Create an app",
-        "name": "name"
+        "name": "name",
+        "quota": "Quota"
       },
       "tile": {
         "created": "Created",
@@ -122,6 +126,11 @@
         "success-desc": "This application has been deleted",
         "error-title": "App deletion failed",
         "error1-desc": "This application could not be deleted, as it still contains buckets."
+      },
+      "update-quota": "Update quota",
+      "updated-toast": {
+        "success-title": "Quota changed",
+        "success-desc": "The quota was successfully changed to {{size}}MB"
       }
     },
     "bucket": {

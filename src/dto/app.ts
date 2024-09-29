@@ -26,8 +26,13 @@ export interface OwnAppDto {
 
 export interface CreateAppRequest {
     name: string,
+    quota: number
 }
 
 export interface DeleteApplicationRequest {
     id: string
+}
+
+export interface EditApplicationQuotaRequest {
+    quota: number,
 }

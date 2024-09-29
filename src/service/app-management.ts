@@ -1,4 +1,10 @@
-import type {AppDto, CreateAppRequest, DeleteApplicationRequest, OwnAppDto} from "@/dto/app";
+import type {
+    AppDto,
+    CreateAppRequest,
+    DeleteApplicationRequest,
+    EditApplicationQuotaRequest,
+    OwnAppDto
+} from "@/dto/app";
 import axios from "axios";
 import {dashboardAddress} from "@/service/api-access";
 import type {BucketDto} from "@/dto/bucket";
@@ -24,4 +30,8 @@ export async function listAppMembers(id: string): Promise<MembersDTO> {
 
 export async function listBuckets(app_id: string): Promise<{ buckets: BucketDto[] }> {
     return (await axios.get(dashboardAddress('/api/app/buckets/' + app_id))).data
+}
+
+export async function modifyAppQuota(app_id: string, req: EditApplicationQuotaRequest) {
+    await axios.patch(dashboardAddress(`/api/app/edit/${app_id}`), req)
 }

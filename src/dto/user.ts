@@ -7,6 +7,7 @@ export interface UserDTO {
     global_role: GlobalRole,
     created: string,
     last_modified: string,
+    quota: number
 }
 export interface MembersDTO {
     members: MemberDto[]

@@ -8,6 +8,10 @@ interface BasicLoginRequest {
     password: string;
 }
 
+interface CatIdLoginRequest {
+    code: string;
+}
+
 interface AuthResponse {
     token: string;
 }

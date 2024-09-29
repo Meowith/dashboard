@@ -55,6 +55,7 @@ declare module 'vue' {
     Panel: typeof import('primevue/panel')['default']
     Password: typeof import('primevue/password')['default']
     PickList: typeof import('primevue/picklist')['default']
+    ProgressBar: typeof import('primevue/progressbar')['default']
     ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RoleManagement: typeof import('./src/components/roles/RoleManagement.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

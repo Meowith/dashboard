@@ -1,8 +1,9 @@
 import {useStateStore} from "@/stores/state";
 import axios from "axios";
-import {controllerAddress, dashboardAddress} from "@/service/api-access";
+import {controllerAddress, dashboardAddress, logout} from "@/service/api-access";
 import {type Router} from "vue-router";
 import type {UserDTO} from "@/dto/user";
+import {fromUserDto} from "@/models/entity";
 
 export async function fetchCurrentUserController(router: Router) {
     await currentUser(controllerAddress('/api/public/user/me'), router)
@@ -37,14 +38,10 @@ async function currentUser(address: string, router: Router) {
     if (!store.globalUser) {
         try {
             let user = (await axios.get(address)).data
-            store.setUser({
-                created: new Date(user.created),
-                globalRole: user.global_role,
-                id: user.id,
-                lastModified: new Date(user.last_modified),
-                name: user.name
-            });
+            store.setUser(fromUserDto(user));
         } catch (e) {
+            console.log(e)
+            logout()
             await router.push({path: '/login'})
         }
     }

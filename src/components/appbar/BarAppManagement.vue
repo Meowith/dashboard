@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import ConfirmDialog from "primevue/confirmdialog";
 import type {App} from "@/models/entity";
-import {ref, watch} from "vue";
-import {deleteApp} from "@/service/app-management";
+import {computed, ref, watch} from "vue";
+import {deleteApp, modifyAppQuota} from "@/service/app-management";
 import {isAxiosError} from "axios";
 import {errorToast} from "@/service/error";
 import {useConfirm} from "primevue/useconfirm";
@@ -11,6 +11,7 @@ import type {MenuItem} from "primevue/menuitem";
 import {useRouter} from "vue-router";
 import {useStateStore} from "@/stores/state";
 import {useTranslation} from "i18next-vue";
+import {storeToRefs} from "pinia";
 
 const props = defineProps<{
   currentApp: App
@@ -21,8 +22,18 @@ const toast = useToast()
 const appOver = ref()
 const appMenuItems = ref<MenuItem[]>([])
 const router = useRouter()
-const {globalUser} = useStateStore();
 const {t} = useTranslation()
+const {globalUser} = useStateStore()
+const {ownApps} = storeToRefs(useStateStore())
+const appQuotaModify = ref(false)
+const appLoading = ref(false)
+const quotaUnit = 1024 * 1024;
+const appQuota = ref(Math.floor(props.currentApp.quota / quotaUnit))
+const quotaLeft = computed(() => {
+  if (!ownApps.value || !globalUser) return 0;
+  let used = ownApps.value!.apps.filter(x => x.owner_id == globalUser.id).map(x => x.quota).reduce((x, y) => x + y, 0) - props.currentApp.quota
+  return globalUser.quota - used;
+})
 
 function appOptionsToggle(event: any) {
   appOver.value.toggle(event);
@@ -32,6 +43,14 @@ watch(() => props.currentApp, (v) => {
   appMenuItems.value = [];
   if (!v) return
   if (globalUser?.id == v.owner_id) {
+    appMenuItems.value.push({
+      label: t('app.menu.update-quota'),
+      icon: "pi pi-pencil",
+      severity: 'secondary',
+      command() {
+        appQuotaModify.value = true
+      },
+    });
     appMenuItems.value.push({
       label: t('app.menu.delete'),
       icon: "pi pi-trash",
@@ -81,6 +100,20 @@ watch(() => props.currentApp, (v) => {
   }
 }, {immediate: true})
 
+async function doModifyQuota() {
+  try {
+    await modifyAppQuota(props.currentApp.id, {quota: appQuota.value * quotaUnit})
+    appQuotaModify.value = false
+    toast.add({
+      life: 3000,
+      summary: t('app.menu.updated-toast.success-title'),
+      detail: t('app.menu.updated-toast.success-desc', {size: appQuota.value})
+    })
+  } catch (e) {
+    errorToast(toast, e)
+  }
+}
+
 </script>
 
 <template>
@@ -98,6 +131,17 @@ watch(() => props.currentApp, (v) => {
         </a>
       </template>
     </Menu>
+    <Dialog v-model:visible="appQuotaModify" :header="t('home.app.create.header')" :style="{ width: '27.5rem' }"
+            modal>
+      <InputGroup class="flex justify-center">
+        <InputNumber class="w-full" v-model="appQuota" :placeholder="t('home.app.create.quota')" :min="1"
+                     :max="Math.floor(quotaLeft / quotaUnit)"
+                     fluid
+                     suffix="MB"></InputNumber>
+        <Button :disabled="appQuota <= 0" :loading="appLoading" icon="pi pi-plus"
+                @click="doModifyQuota"></Button>
+      </InputGroup>
+    </Dialog>
   </div>
 </template>
 

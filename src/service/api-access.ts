@@ -4,7 +4,6 @@ import type {Reactive} from "vue";
 import {type NodeMap, useNodesStore} from "@/stores/nodes";
 import {useStateStore} from "@/stores/state";
 import {APP_ID, AppPermission} from "@/dto/role";
-import app from "@/App.vue";
 import {decodePermSet} from "@/service/role-management";
 
 let nodes: Reactive<NodeMap>;
@@ -15,6 +14,10 @@ export function controllerAddress(path: string): string {
 
 export function dashboardAddress(path: string): string {
     return nodes.dashboards[0].addr + path
+}
+
+export async function getLoginMethods(): Promise<string[]> {
+    return (await axios.get(dashboardAddress("/api/auth/methods"))).data.methods
 }
 
 export function initApiAccess() {
@@ -62,6 +65,12 @@ export async function dashboardBasicLogin(req: BasicLoginRequest): Promise<AuthR
             "username": req.username,
             "password": req.password
         }
+    })).data;
+}
+
+export async function dashboardCatidLogin(req: CatIdLoginRequest): Promise<AuthResponse> {
+    return (await axios.post(dashboardAddress("/api/auth/login?code=" + req.code), {
+        method: 'CATID'
     })).data;
 }
 

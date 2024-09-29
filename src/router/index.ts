@@ -16,6 +16,7 @@ import {listOwnedApps} from "@/service/app-management";
 import NotFoundView from "@/views/NotFoundView.vue";
 import {getRoles} from "@/service/role-management";
 import AdminUserView from "@/components/admin/AdminUserView.vue";
+import LoginRedirectedView from "@/views/LoginRedirectedView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -72,7 +73,12 @@ const router = createRouter({
         {
             path: '/login',
             name: 'login',
-            component: LoginView
+            component: LoginView,
+        },
+        {
+            path: '/login/method/:method',
+            name: 'redir',
+            component: LoginRedirectedView
         },
         {
             path: '/setup',
@@ -89,7 +95,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next: NavigationGuardNext) => {
     let {preferences} = usePreferenceStore()
-    if (!preferences.token && to.redirectedFrom == undefined && to.name != "login" && to.name != "setup") {
+    if (!preferences.token && to.redirectedFrom == undefined && to.name != "login" && to.name != "setup" && to.name != 'redir') {
         return next("/login")
     }
 

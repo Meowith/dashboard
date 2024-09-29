@@ -5,10 +5,12 @@ import type {MenuItem} from "primevue/menuitem";
 import {logout} from "@/service/api-access";
 import {useTranslation} from "i18next-vue";
 import {useRouter} from "vue-router";
+import {useStateStore} from "@/stores/state";
 
 const op = ref()
 const {t} = useTranslation()
 const router = useRouter()
+const {globalUser} = useStateStore()
 
 function popover(event: any) {
   op.value.toggle(event)
@@ -17,12 +19,15 @@ function popover(event: any) {
 const userMenuItems = ref<MenuItem[]>([])
 onMounted(() => {
   userMenuItems.value.push({
-    label: t('home.menu.logout'),
-    icon: "pi pi-sign-out",
-    command() {
-      logout()
-      router.push({path: '/login'})
-    }
+    label: globalUser?.name,
+    items: [{
+      label: t('home.menu.logout'),
+      icon: "pi pi-sign-out",
+      command() {
+        logout()
+        router.push({path: '/login'})
+      }
+    }]
   })
 })
 

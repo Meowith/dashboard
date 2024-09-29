@@ -11,7 +11,8 @@ export interface GlobalUserInfo {
     name: string;
     lastModified: Date,
     created: Date,
-    globalRole: GlobalRole
+    globalRole: GlobalRole,
+    quota: number
 }
 
 export const useStateStore = defineStore('state', {
