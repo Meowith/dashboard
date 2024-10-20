@@ -7,12 +7,12 @@ import StepPanels from 'primevue/steppanels';
 import Step from 'primevue/step';
 import StepPanel from 'primevue/steppanel';
 import CatIDLoginForm from "@/components/CatIDLoginForm.vue";
-import {getLoginMethods} from "@/service/api-access";
+import {getLoginMethods, getSetupLoginMethods} from "@/service/api-access";
 import {errorToast} from "@/service/error";
 import {useToast} from "primevue/usetoast";
 import Toast from "primevue/toast";
 
-defineProps<{
+const props = defineProps<{
   setup: boolean
 }>()
 const loading = ref(true)
@@ -26,7 +26,12 @@ const loginMethods = ref([
 
 onMounted(async () => {
   try {
-    let methods = await getLoginMethods()
+    let methods;
+    if (props.setup) {
+      methods = await getSetupLoginMethods()
+    } else {
+      methods = await getLoginMethods()
+    }
     loginMethods.value = methods.map(x => {
       return {
         name: x

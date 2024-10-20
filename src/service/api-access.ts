@@ -20,6 +20,10 @@ export async function getLoginMethods(): Promise<string[]> {
     return (await axios.get(dashboardAddress("/api/auth/methods"))).data.methods
 }
 
+export async function getSetupLoginMethods(): Promise<string[]> {
+    return (await axios.get(controllerAddress("/api/auth/methods"))).data.methods
+}
+
 export function initApiAccess() {
     let store = usePreferenceStore();
     let nodeStore = useNodesStore();
@@ -56,6 +60,13 @@ export async function controllerBasicLogin(req: BasicLoginRequest): Promise<Auth
         }
     })).data;
 }
+
+export async function controllerCatidLogin(req: CatIdLoginRequest): Promise<AuthResponse> {
+    return (await axios.post(controllerAddress("/api/auth/login?code=" + req.code), {
+        method: 'CATID'
+    })).data;
+}
+
 
 export async function dashboardBasicLogin(req: BasicLoginRequest): Promise<AuthResponse> {
     return (await axios.post(dashboardAddress("/api/auth/login"), {
