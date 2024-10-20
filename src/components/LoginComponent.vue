@@ -11,6 +11,7 @@ import {getLoginMethods, getSetupLoginMethods} from "@/service/api-access";
 import {errorToast} from "@/service/error";
 import {useToast} from "primevue/usetoast";
 import Toast from "primevue/toast";
+import {isAxiosError} from "axios";
 
 const props = defineProps<{
   setup: boolean
@@ -27,11 +28,23 @@ const loginMethods = ref([
 onMounted(async () => {
   try {
     let methods;
-    if (props.setup) {
-      methods = await getSetupLoginMethods()
-    } else {
+
+    try {
       methods = await getLoginMethods()
+    } catch (e) {
+      if (isAxiosError(e) && !e.response) {
+        methods = await getSetupLoginMethods()
+      } else {
+        errorToast(useToast(), e)
+        loading.value = false
+      }
     }
+
+    if (!methods) {
+      loading.value = false
+      return;
+    }
+
     loginMethods.value = methods.map(x => {
       return {
         name: x

@@ -6,6 +6,7 @@ import {usePreferenceStore} from "@/stores/preferences";
 import image from "@/assets/catid.svg";
 import {useTranslation} from "i18next-vue";
 import {controllerCatidLogin, dashboardCatidLogin} from "@/service/api-access";
+import {isAxiosError} from "axios";
 
 const route = useRoute();
 const router = useRouter();
@@ -27,13 +28,17 @@ if (code != undefined && code.trim() !== '') {
     store.preferences.token = result.token;
     router.push({path: '/'})
   }).catch(err => {
-    controllerCatidLogin({code}).then(result => {
-      store.preferences.token = result.token;
-      router.push({path: '/'})
-    }).catch(err => {
-      error.value = err.response.data;
-      isError.value = true;
-    })
+    if (isAxiosError(err)) {
+      if (!err.response) {
+        controllerCatidLogin({code}).then(result => {
+          store.preferences.token = result.token;
+          router.push({path: '/'})
+        }).catch(err => {
+          error.value = err.response.data;
+          isError.value = true;
+        })
+      }
+    }
   })
 } else {
   aboutToRoute.value = true;
