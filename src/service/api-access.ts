@@ -62,9 +62,7 @@ export async function controllerBasicLogin(req: BasicLoginRequest): Promise<Auth
 }
 
 export async function controllerCatidLogin(req: CatIdLoginRequest): Promise<AuthResponse> {
-    return (await axios.post(controllerAddress("/api/auth/login?code=" + req.code), {
-        method: 'CATID'
-    })).data;
+    return (await axios.post(controllerAddress("/api/auth/login/CATID?code=" + req.code))).data;
 }
 
 
