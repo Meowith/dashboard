@@ -30,8 +30,8 @@ async function fetchNodes() {
           addr: node.address,
           created: new Date(node.created),
           id: node.id,
-          max_space: node.max_space || 0,
-          used_space: node.used_space || 0,
+          max_space: node.info?.max_space || 0,
+          used_space: node.info?.used_space || 0,
           last_beat: new Date(node.last_beat)
         });
       } else if (node.microservice_type == MicroserviceType.Dashboard) {
