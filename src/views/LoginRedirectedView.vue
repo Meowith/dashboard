@@ -34,7 +34,7 @@ if (code != undefined && code.trim() !== '') {
           store.preferences.token = result.token;
           router.push({path: '/'})
         }).catch(err => {
-          error.value = err.response.data;
+          error.value = err.response?.data || "connection failure";
           isError.value = true;
         })
       }
