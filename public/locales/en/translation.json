@@ -241,7 +241,8 @@
           "ListDirectory": "List Directory",
           "ListBucket": "List Bucket",
           "Rename": "Rename",
-          "Delete": "Delete"
+          "Delete": "Delete",
+          "FetchBucketInfo": "FetchBucketInfo"
         }
       }
     }

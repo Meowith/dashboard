@@ -8,6 +8,7 @@ export enum UserPermission {
     ListBucket = 5,
     Rename = 6,
     Delete = 7,
+    FetchBucketInfo = 8,
 }
 
 export enum AppPermission {
