@@ -70,7 +70,7 @@ watch(tokenCreationVisible, () => {
         <Button :disabled="!tokenName || tokenName.length > 100" :loading="tokenLoading" icon="pi pi-plus"
                 @click="doCreateToken"></Button>
       </InputGroup>
-      <ScopeEditor v-if="currentApp" :app="currentApp" :save-loading="tokenLoading" :scopes="perms"
+      <ScopeEditor v-if="currentApp" :app="currentApp" :save-loading="tokenLoading" v-model:scopes="perms"
                    :save-disable="tokenName.length == 0" @save="doCreateToken"/>
     </div>
     <div v-else class="flex flex-col justify-center items-center">
