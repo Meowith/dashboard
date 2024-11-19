@@ -8,6 +8,7 @@ import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import {deleteBucket} from "@/service/bucket-management";
 import {errorToast} from "@/service/error";
+import copy from "copy-to-clipboard";
 
 const props = defineProps<{
   bucket: Bucket
@@ -70,6 +71,17 @@ function bucketMenuToggle(e: any) {
   bucketMenu.value.toggle(e)
 }
 
+const copySuccess = ref(false)
+
+function copyId() {
+  if (copy(props.bucket.id)) {
+    copySuccess.value = true
+    setTimeout(() => {
+      copySuccess.value = false
+    }, 1000)
+  }
+}
+
 </script>
 
 <template>
@@ -79,7 +91,9 @@ function bucketMenuToggle(e: any) {
         <div class="flex flex-row items-center w-full">
           <span class="flex-grow">{{ bucket.name }}</span>
         </div>
-        <span class="font-thin text-xs text-surface-500 dark:text-surface-400">{{ bucket.id }}</span>
+        <span class="font-thin text-xs text-surface-500 dark:text-surface-400" style="margin-top: -0.5em">{{
+            bucket.id
+          }} <Button :icon="`pi ${copySuccess ? 'pi-check' : 'pi-clipboard'}`" text size="small" style="width: 2em; height: 2em;" @click="copyId"></Button></span>
       </div>
       <Button aria-label="Filter" icon="pi pi-ellipsis-v" rounded severity="secondary" text
               @click="bucketMenuToggle"/>

@@ -48,7 +48,7 @@ onUnmounted(() => {
   <div class="flex w-full" v-if="loading">
     <ProgressSpinner/>
   </div>
-  <div v-if="!loading" class="flex flex-wrap gap-4 flex-grow">
+  <div v-if="!loading" class="flex flex-wrap gap-4">
     <BucketTile v-for="bucket in buckets" :key="bucket.id" :bucket="bucket" class="flex-grow"
                 @refresh="fetchBuckets()"/>
     <div class="flex w-full flex-col flex-grow justify-center items-center" v-if="buckets.length == 0">

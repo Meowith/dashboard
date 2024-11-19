@@ -10,7 +10,6 @@ import {errorToast} from "@/service/error";
 import {useToast} from "primevue/usetoast";
 import {useTranslation} from "i18next-vue";
 import {useConfirm} from "primevue/useconfirm";
-import ConfirmDialog from "primevue/confirmdialog";
 import {hasPermission} from "@/service/api-access";
 import {AppPermission} from "@/dto/role";
 import {fetchUserById} from "@/service/user";
@@ -60,6 +59,7 @@ watch(() => props.refresh, () => {
 })
 
 function promptDelete(token: AppToken) {
+  console.log("ptompt delete")
   confirm.require({
     message: t('app.tokens.prompt.delete-sure'),
     header: t('app.tokens.prompt.delete'),
@@ -94,7 +94,6 @@ function promptDelete(token: AppToken) {
   </div>
   <div v-if="!loading">
     <Panel :header="t(`app.tokens.table.${canSeeAll ? 'title-all' : 'title-your'}`)">
-      <ConfirmDialog></ConfirmDialog>
       <DataTable :value="tokens" v-if="tokens.length">
         <Column :header="t('app.tokens.table-cols.name')" field="name"/>
         <Column :header="t('app.tokens.table-cols.created')" field="created">
