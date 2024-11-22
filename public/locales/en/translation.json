@@ -22,7 +22,11 @@
       "add-generate": "Create a new register code.",
       "add-tip": "Register your new node with the provided code.",
       "code-gen-fail": "Code generation",
-      "code-gen-fail-desc": "Could not issue the register code"
+      "code-gen-fail-desc": "Could not issue the register code",
+      "node-deleted-desc": "The node has been successfully deleted",
+      "node-deleted-title": "Node deleted.",
+      "node-delete-header": "Delete node",
+      "node-delete-sure": "Are you sure you want to delete this node?"
     },
     "users": {
       "columns": {
@@ -43,7 +47,11 @@
       "storage": {
         "max": "Max:",
         "used": "Used:",
-        "storage": "Storage space"
+        "storage": "Storage space",
+        "chunks": "Chunks",
+        "committed": "Commited:",
+        "uncommitted": "Uncommitted:",
+        "reserved": "Reserved:"
       }
     },
     "nav": {

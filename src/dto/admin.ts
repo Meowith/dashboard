@@ -1,4 +1,5 @@
 export interface DashboardNode {
+    type: MicroserviceType,
     addr: string
     id: string
     created: Date
@@ -7,13 +8,13 @@ export interface DashboardNode {
 }
 
 export interface StorageNode {
+    type: MicroserviceType,
     addr: string,
     id: string,
     created: Date,
     access_token_issued_at: Date,
     last_beat: Date,
-    max_space: number,
-    used_space: number,
+    info: UpdateStorageNodeProperties,
 }
 
 export interface RegisterCodeResponse {
@@ -25,7 +26,7 @@ export interface NodeStatusResponse {
 }
 
 export interface NodeStatus {
-    microservice_type: number,
+    microservice_type: MicroserviceType,
     id: string,
     address: string,
     info: UpdateStorageNodeProperties | undefined,

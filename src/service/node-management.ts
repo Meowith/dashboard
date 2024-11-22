@@ -17,3 +17,7 @@ export async function listNodeRegisterCodes(): Promise<ServiceRegisterCodeDto[]>
 export async function fetchNodeStatus(): Promise<NodeStatusResponse> {
     return (await axios.get(controllerAddress('/api/public/node/status'))).data;
 }
+
+export async function deleteNode(type: number, id: string): Promise<void> {
+    return (await axios.delete(controllerAddress(`/api/public/node/delete/${type}/${id}`)))
+}
