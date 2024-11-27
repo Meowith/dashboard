@@ -6,9 +6,11 @@ import {computed, onMounted, ref} from "vue";
 import type {MenuItem} from "primevue/menuitem";
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
-import {deleteBucket} from "@/service/bucket-management";
+import {deleteBucket, updateBucketQuota} from "@/service/bucket-management";
 import {errorToast} from "@/service/error";
 import copy from "copy-to-clipboard";
+import {useStateStore} from "@/stores/state";
+import {storeToRefs} from "pinia";
 
 const props = defineProps<{
   bucket: Bucket
@@ -21,8 +23,19 @@ const percent = computed(() => {
 
 const bucketMenuItems = ref<MenuItem[]>()
 const bucketMenu = ref()
+const bucketQuotaModify = ref(false)
+const {ownApps, currentBuckets} = storeToRefs(useStateStore())
 const confirm = useConfirm()
 const toast = useToast()
+const bucketLoading = ref(false)
+const quotaUnit = 1024 * 1024;
+const bucketQuota = ref(Math.floor(props.bucket.quota / quotaUnit))
+const quotaLeft = computed(() => {
+  if (!ownApps.value) return 0;
+  let app = ownApps.value!.apps.find(x => x.id == props.bucket.app_id)
+  if (!app) return 0;
+  return app.quota - currentBuckets.value.reduce((a, b) => a + b.quota, 0)
+})
 const emit = defineEmits(['refresh'])
 
 onMounted(() => {
@@ -63,6 +76,13 @@ onMounted(() => {
           }
         });
       },
+    },
+    {
+      label: t('app.bucket.menu.edit-quota'),
+      icon: 'pi pi-pencil',
+      command() {
+        bucketQuotaModify.value = true
+      }
     }
   ]
 })
@@ -82,6 +102,17 @@ function copyId() {
   }
 }
 
+async function doModifyQuota() {
+  bucketLoading.value = true
+  try {
+    await updateBucketQuota(props.bucket.app_id, props.bucket.id, bucketQuota.value * quotaUnit)
+    emit('refresh')
+  } catch (e) {
+    errorToast(toast, e)
+  }
+  bucketLoading.value = false
+}
+
 </script>
 
 <template>
@@ -93,7 +124,8 @@ function copyId() {
         </div>
         <span class="font-thin text-xs text-surface-500 dark:text-surface-400" style="margin-top: -0.5em">{{
             bucket.id
-          }} <Button :icon="`pi ${copySuccess ? 'pi-check' : 'pi-clipboard'}`" text size="small" style="width: 2em; height: 2em;" @click="copyId"></Button></span>
+          }} <Button :icon="`pi ${copySuccess ? 'pi-check' : 'pi-clipboard'}`" text size="small"
+                     style="width: 2em; height: 2em;" @click="copyId"></Button></span>
       </div>
       <Button aria-label="Filter" icon="pi pi-ellipsis-v" rounded severity="secondary" text
               @click="bucketMenuToggle"/>
@@ -130,6 +162,17 @@ function copyId() {
         {{ t('app.bucket.tile.created') }} {{ bucket.created.toLocaleString() }}
       </span>
     </template>
+    <Dialog v-model:visible="bucketQuotaModify" :header="t('app.bucket.menu.edit-quota')" :style="{ width: '27.5rem' }"
+            modal>
+      <InputGroup class="flex justify-center">
+        <InputNumber class="w-full" v-model="bucketQuota" :placeholder="t('home.app.create.quota')" :min="1"
+                     :max="Math.floor(quotaLeft / quotaUnit)"
+                     fluid
+                     suffix="MB"></InputNumber>
+        <Button :disabled="bucketQuota <= 0" :loading="bucketLoading" icon="pi pi-plus"
+                @click="doModifyQuota"></Button>
+      </InputGroup>
+    </Dialog>
   </Panel>
 </template>
 

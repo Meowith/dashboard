@@ -14,3 +14,9 @@ export async function deleteBucket(app_id: string, bucket_id: string) {
         }
     })
 }
+
+export async function updateBucketQuota(app_id: string, bucket_id: string, new_quota: number) {
+    await axios.patch(dashboardAddress(`/api/bucket/update/${app_id}/${bucket_id}`), {
+        quota: new_quota
+    })
+}

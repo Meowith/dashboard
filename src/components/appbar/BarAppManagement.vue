@@ -131,7 +131,7 @@ async function doModifyQuota() {
         </a>
       </template>
     </Menu>
-    <Dialog v-model:visible="appQuotaModify" :header="t('home.app.create.header')" :style="{ width: '27.5rem' }"
+    <Dialog v-model:visible="appQuotaModify" :header="t('home.app.update-quota.header')" :style="{ width: '27.5rem' }"
             modal>
       <InputGroup class="flex justify-center">
         <InputNumber class="w-full" v-model="appQuota" :placeholder="t('home.app.create.quota')" :min="1"
