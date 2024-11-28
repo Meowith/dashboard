@@ -160,7 +160,7 @@ const dashboardsAlive = computed(() => {
         </div>
       </div>
     </Panel>
-    <Panel class="flex-grow full-height-panel-content min-h-48">
+    <Panel class="flex-grow full-height-panel-content min-h-48 min-w-72">
       <template #header>
         <div class="col-span-2 items-center gap-2 flex">
           <i class="pi pi-barcode"></i>
@@ -219,7 +219,7 @@ const dashboardsAlive = computed(() => {
         </div>
       </template>
       <div class="flex flex-row flex-wrap" style="gap: 18px">
-        <StorageNodeTile v-for="node in nodes.concat(nodes)" :key="node.id" :node="node" class="flex-grow"/>
+        <StorageNodeTile v-for="node in nodes" :key="node.id" :node="node" class="flex-grow"/>
       </div>
     </Panel>
   </div>
