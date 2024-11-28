@@ -9,7 +9,8 @@
     "403": "Forbidden",
     "codes": {
       "title": "Register codes",
-      "invalid": "This code is invalid"
+      "invalid": "This code is invalid",
+      "none": "No register codes exist."
     },
     "nodes": {
       "storage": "Storage services",

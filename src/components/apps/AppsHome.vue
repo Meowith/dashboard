@@ -22,7 +22,15 @@ async function fetchApps() {
   setApps(fromOwnedApps(await listOwnedApps()))
 }
 
-onMounted(fetchApps)
+let interval: ReturnType<typeof setInterval>;
+onMounted(() => {
+  fetchApps()
+  interval = setInterval(fetchApps, 30000)
+})
+
+onMounted(() => {
+  clearInterval(interval)
+})
 
 </script>
 

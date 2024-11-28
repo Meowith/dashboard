@@ -143,14 +143,14 @@ const dashboardsAlive = computed(() => {
 
 <template>
   <div class="flex flex-wrap gap-4">
-    <Panel class="flex-grow">
+    <Panel class="flex-grow full-height-panel-content">
       <template #header>
-        <div class="col-span-2 text-sm items-center gap-2 flex">
+        <div class="col-span-2 items-center gap-2 flex">
           <i class="pi pi-database"></i>
-          <span>{{ t('admin.tiles.storage.storage') }}</span>
+          <span class="p-panel-title text-base">{{ t('admin.tiles.storage.storage') }}</span>
         </div>
       </template>
-      <div class="flex flex-row gap-2 items-center">
+      <div class="flex flex-row gap-2 items-center justify-center h-full" style="padding: 18px">
         <knob :model-value="percent" :valueTemplate="(n) => n.toFixed(0) + '%'" readonly></knob>
         <div class="grid grid-cols-2 h-18">
           <span>{{ t('admin.tiles.storage.max') }}</span>
@@ -160,22 +160,14 @@ const dashboardsAlive = computed(() => {
         </div>
       </div>
     </Panel>
-    <Panel :header="t('admin.nodes.nodes')" class="flex-grow">
-      <div class="flex flex-row gap-2 items-center w-full">
-        <div class="grid grid-cols-2 h-18 items-center w-full">
-          <span>{{ t('admin.nodes.storages') }}</span>
-          <ProgressBar class="ml-2" :value="nodesAlive / nodes.length * 100">
-            {{ nodesAlive }} / {{ nodes.length }}
-          </ProgressBar>
-          <span>{{ t('admin.nodes.dashboards') }}</span>
-          <ProgressBar class="ml-2" :value="dashboardsAlive / dashboards.length * 100">
-            {{ dashboardsAlive }} / {{ dashboards.length }}
-          </ProgressBar>
+    <Panel class="flex-grow full-height-panel-content min-h-48">
+      <template #header>
+        <div class="col-span-2 items-center gap-2 flex">
+          <i class="pi pi-barcode"></i>
+          <span class="p-panel-title text-base">{{ t('admin.codes.title') }}</span>
         </div>
-      </div>
-    </Panel>
-    <Panel :header="t('admin.codes.title')" class="flex-grow full-height-panel-content">
-      <VirtualScroller :itemSize="50" :items="codes"
+      </template>
+      <VirtualScroller :itemSize="50" :items="codes" v-if="codes.length > 0">
                        class="sm:w-96 rounded fill-panel">
         <template v-slot:item="{ item, options }">
           <div :class="['flex items-center p-2 gap-2', { 'bg-surface-100 dark:bg-surface-800': options.odd }]"
@@ -195,15 +187,39 @@ const dashboardsAlive = computed(() => {
           </div>
         </template>
       </VirtualScroller>
+      <div class="flex flex-col text-sm justify-center items-center h-full text-gray-500" style="padding: 0 18px 18px;">
+        <i class="pi pi-warehouse"></i>
+        <span>{{t('admin.codes.none')}}</span>
+      </div>
     </Panel>
-    <Panel :header="t('admin.nodes.dashboard')" class="flex-grow">
-      <div class="flex flex-row flex-wrap gap-2">
+    <Panel class="flex-grow">
+      <template #header>
+        <div class="col-span-2 items-center flex">
+          <i class="pi pi-desktop"></i>
+          <span class="ml-2 p-panel-title text-base">{{ t('admin.nodes.dashboard') }}</span>
+          <divider layout="vertical"/>
+          <ProgressBar class="w-24" :value="dashboardsAlive / dashboards.length * 100">
+            {{ dashboardsAlive }} / {{ dashboards.length }}
+          </ProgressBar>
+        </div>
+      </template>
+      <div class="flex flex-row flex-wrap" style="gap: 18px">
         <DashboardNodeTile v-for="node in dashboards" :key="node.id" :node="node" class="flex-grow"/>
       </div>
     </Panel>
-    <Panel :header="t('admin.nodes.storage')" class="flex-grow">
-      <div class="flex flex-row flex-wrap gap-2">
-        <StorageNodeTile v-for="node in nodes" :key="node.id" :node="node" class="flex-grow"/>
+    <Panel class="flex-grow">
+      <template #header>
+        <div class="col-span-2 items-center flex">
+          <i class="pi pi-cloud-download"></i>
+          <span class="ml-2 p-panel-title text-base">{{ t('admin.nodes.storage') }}</span>
+          <divider layout="vertical"></divider>
+          <ProgressBar class="w-24" :value="nodesAlive / nodes.length * 100">
+            {{ nodesAlive }} / {{ nodes.length }}
+          </ProgressBar>
+        </div>
+      </template>
+      <div class="flex flex-row flex-wrap" style="gap: 18px">
+        <StorageNodeTile v-for="node in nodes.concat(nodes)" :key="node.id" :node="node" class="flex-grow"/>
       </div>
     </Panel>
   </div>
@@ -219,10 +235,12 @@ const dashboardsAlive = computed(() => {
 .full-height-panel-content {
   display: flex;
   flex-direction: column;
+
   & .p-panel-content {
     height: 100%;
     padding: 0 !important;
   }
+
   & .p-panel-content-container {
     flex-grow: 1;
   }
