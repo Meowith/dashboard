@@ -187,7 +187,7 @@ const dashboardsAlive = computed(() => {
           </div>
         </template>
       </VirtualScroller>
-      <div class="flex flex-col text-sm justify-center items-center h-full text-gray-500" style="padding: 0 18px 18px;">
+      <div class="flex flex-col text-sm justify-center items-center h-full text-gray-500" style="padding: 0 18px 18px;" v-else>
         <i class="pi pi-warehouse"></i>
         <span>{{t('admin.codes.none')}}</span>
       </div>

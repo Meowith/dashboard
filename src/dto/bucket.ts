@@ -17,3 +17,21 @@ export interface CreateBucketRequest {
     quota: number,
     atomic_upload: boolean,
 }
+
+export interface UploadSessionDto {
+    app_id: string,
+    bucket_id: string,
+    path: string,
+    size: number,
+    durable: boolean,
+    last_access: Date,
+}
+
+export interface UploadSession {
+    app_id: string,
+    bucket_id: string,
+    path: string,
+    size: number,
+    durable: boolean,
+    last_access: Date,
+}

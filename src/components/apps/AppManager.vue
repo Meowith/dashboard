@@ -37,7 +37,7 @@ watch(() => props.refresh, () => {
 let interval: ReturnType<typeof setInterval>
 onMounted(async () => {
   await fetchBuckets(true)
-  interval = setInterval(() => fetchBuckets(false), 5000)
+  interval = setInterval(() => fetchBuckets(false), 15000)
 })
 
 onUnmounted(() => {

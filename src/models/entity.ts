@@ -1,5 +1,5 @@
 import type {AppDto, MemberDto, OwnAppDto} from "@/dto/app";
-import type {BucketDto} from "@/dto/bucket";
+import type {BucketDto, UploadSession, UploadSessionDto} from "@/dto/bucket";
 import type {ScopedPermission, UserRoleDTO} from "@/dto/role";
 import type {TokenDto} from "@/dto/token";
 import type {UserDTO} from "@/dto/user";
@@ -92,3 +92,8 @@ export const fromUserDto = ({created, last_modified, global_role, ...rest}: User
     created: new Date(created),
     lastModified: new Date(last_modified)
 })
+
+export const uploadSessionFrom = ({last_access, ...rest}: UploadSessionDto): UploadSession => ({
+    ...rest,
+    last_access: new Date(last_access),
+});

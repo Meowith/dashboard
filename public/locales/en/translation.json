@@ -148,6 +148,9 @@
     "bucket": {
       "empty": "There are no buckets in this app",
       "tile": {
+        "sessions": "Sessions",
+        "count": "Count:",
+        "reserved": "Reserved:",
         "created": "Created",
         "storage-used": "Used:",
         "storage-max": "Quota:",

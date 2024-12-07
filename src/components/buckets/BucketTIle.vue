@@ -2,15 +2,16 @@
 import type {Bucket} from "@/models/entity";
 import {useTranslation} from "i18next-vue";
 import {filesize} from "filesize";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import type {MenuItem} from "primevue/menuitem";
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
-import {deleteBucket, updateBucketQuota} from "@/service/bucket-management";
+import {deleteBucket, getBucketSessions, updateBucketQuota} from "@/service/bucket-management";
 import {errorToast} from "@/service/error";
 import copy from "copy-to-clipboard";
 import {useStateStore} from "@/stores/state";
 import {storeToRefs} from "pinia";
+import type {UploadSession} from "@/dto/bucket";
 
 const props = defineProps<{
   bucket: Bucket
@@ -38,7 +39,23 @@ const quotaLeft = computed(() => {
 })
 const emit = defineEmits(['refresh'])
 
-onMounted(() => {
+const sessions = ref<UploadSession[]>([])
+let sessionInterval: ReturnType<typeof setInterval>
+const sessionReserved = computed(() => {
+  return sessions.value.reduce((a, b) => a + b.size, 0)
+})
+
+onMounted(async () => {
+
+  sessionInterval = setInterval(async () => {
+    try {
+      sessions.value = await getBucketSessions(props.bucket.app_id, props.bucket.id)
+    } catch (e) {}
+  }, 5000)
+  try {
+    sessions.value = await getBucketSessions(props.bucket.app_id, props.bucket.id)
+  } catch (e) {}
+
   bucketMenuItems.value = [
     {
       label: t('confirm.delete'),
@@ -85,6 +102,10 @@ onMounted(() => {
       }
     }
   ]
+})
+
+onUnmounted(() => {
+  clearInterval(sessionInterval)
 })
 
 function bucketMenuToggle(e: any) {
@@ -154,7 +175,18 @@ async function doModifyQuota() {
           <span>{{ t('app.bucket.tile.files') }}</span>
           <span>{{ bucket.file_count }}</span>
         </div>
+        <div class="grid grid-cols-2 h-18" style="gap: 0 0.5em;">
+          <div class="col-span-2 text-sm text-surface-500 dark:text-surface-400 items-center gap-2 flex">
+            <i class="pi pi-database"></i>
+            <span>{{ t('app.bucket.tile.sessions') }}</span>
+          </div>
+          <span>{{ t('app.bucket.tile.count') }}</span>
+          <span>{{ sessions.length }}</span>
+          <span>{{ t('app.bucket.tile.reserved') }}</span>
+          <span v-tooltip="sessionReserved + 'B'">{{ filesize(sessionReserved, {standard: "jedec"}) }}</span>
+        </div>
       </div>
+
     </div>
 
     <template #footer>
